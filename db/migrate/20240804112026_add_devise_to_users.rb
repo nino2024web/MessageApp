@@ -3,16 +3,8 @@
 class AddDeviseToUsers < ActiveRecord::Migration[7.1]
   def self.up
     change_table :users do |t|
-      ## Database authenticatable
-      t.string :email,              null: false, default: ""
-      t.string :encrypted_password, null: false, default: ""
-
-      ## Recoverable
-      t.string   :reset_password_token
-      t.datetime :reset_password_sent_at
-
       ## Rememberable
-      t.datetime :remember_created_at
+      # t.datetime :remember_created_at
 
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
@@ -32,13 +24,13 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.1]
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
-
       # Uncomment below if timestamps were not included in your original model.
       # t.timestamps null: false
     end
 
-    add_index :users, :email,                unique: true
-    add_index :users, :reset_password_token, unique: true
+    # 既に存在するインデックスも確認し、必要に応じてコメントアウトまたは削除
+    add_index :users, :email,                unique: true unless index_exists?(:users, :email)
+    add_index :users, :reset_password_token, unique: true unless index_exists?(:users, :reset_password_token)
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
   end

@@ -9,11 +9,15 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <%= yield %>
     <% if user_signed_in? %>
+      <%= render "layouts/header" %>
+      <%= render "layouts/left_side" %>
+      <%= render "layouts/center" %>
       <li>
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, 'data-turbo-frame': '_top' %>
       </li>
+    <% else %>
+      <%= yield %>
     <% end %>
   </body>
 </html>

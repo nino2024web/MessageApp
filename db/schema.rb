@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_16_115412) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_01_021538) do
   create_table "conversations", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "friends", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "friend_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friends_on_friend_id"
+    t.index ["user_id"], name: "index_friends_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -29,13 +38,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_16_115412) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "country", default: "", null: false
+    t.string "name", default: "", null: false
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
     t.string "country_code", default: "JP"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "messages", "users"
+  add_foreign_key "friends", "friends"
+  add_foreign_key "friends", "users"
 end

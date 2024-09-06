@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+
+  .left {
+    display: flex;
+    align-items: center;
+
+    .friend-search {
+      margin-right: 10px;
+      font-weight: bold;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .friend-search {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
+.right {
+  .header-options {
+    font-size: 24px;
+    text-decoration: none;
+    color: #333;
+  }
+
+  &:hover {
+    color: #007bff;
+  }
+}

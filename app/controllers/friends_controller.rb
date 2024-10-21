@@ -1,6 +1,11 @@
 class FriendsController < ApplicationController
-  def index
-    @recent_friends = current_user.recent_friends.limit(5)
-    @all_friends = current_user.all_friends
+  before_action :authenticate_user!
+
+  def search
+    # Searching for friends by name
+    @friends = User.where("name LIKE ?", "%#{params[:query]}%")
+
+    # Rendering only the search results, not the full page
+    render partial: "friends/friend_search_results", locals: { friends: @friends }
   end
 end

@@ -1,0 +1,10 @@
+<div id="chat-window">
+  <div id="message">
+    <%= form_with model: [@conversation, Message.new], data: {turbo_frame: "messages" }, local: false do |form| %>
+      <div>
+        <%= form.text_field :content, placeholder:  "メッセージを入力" %>
+        <%= form.submit "送信"%>
+      </div>
+    <% end %>
+  </div>
+</div>

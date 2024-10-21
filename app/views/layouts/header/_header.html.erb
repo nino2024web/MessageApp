@@ -1,0 +1,11 @@
+<div class="header">
+  <div class="left">
+    <%= form_with url:search_friends_path, method: :get, data: {turbo_frame: "friend_search_results"}, class: "search-form" do |form| %>
+      <%= form.text_field :query, placeholder: "友達を検索", id: "friend-search"%>
+      <%= form.submit "検索", class: "search-button" %>
+    <% end %>
+  </div>
+  <div class="right">
+    <a href="#" class="header-options">...</a>
+  </div>
+</div>

@@ -3,6 +3,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :timeoutable
 
+  validates :name, presence: true, uniqueness: { case_sensitive: false, message: '同じ名前が登録されています' }
+  validates :email, uniqueness: { case_sensitive: false, message: '同じメールアドレスが登録されています' }
+
   has_many :friends
 
   # 最近の友達を取得するメソッド

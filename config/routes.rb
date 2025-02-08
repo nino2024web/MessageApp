@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  resources :users, only: [:show]
+
   resources :conversations, only: %i[index show new create] do
     resources :messages, only: [:create]
   end

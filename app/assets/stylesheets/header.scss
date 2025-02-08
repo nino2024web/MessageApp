@@ -1,40 +1,19 @@
+
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #f8f9fa;
+  justify-content: space-between;
+  background-color: #def7ff;
+  color: white;
+  padding: 10px 20px;
 
-  .left {
-    display: flex;
-    align-items: center;
-
-    .friend-search {
-      margin-right: 10px;
+  .user-info {
+    .user-name {
       font-weight: bold;
-      color: #007bff;
-      text-decoration: none;
+      font-size: 20px;
+      color: black;
+      padding: 10px;
+      border-radius: 5px;
     }
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .friend-search {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-}
-.right {
-  .header-options {
-    font-size: 24px;
-    text-decoration: none;
-    color: #333;
-  }
-
-  &:hover {
-    color: #007bff;
   }
 }

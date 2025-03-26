@@ -6,15 +6,17 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: { case_sensitive: false, message: '同じ名前が登録されています' }
   validates :email, uniqueness: { case_sensitive: false, message: '同じメールアドレスが登録されています' }
 
-  has_many :friends
+  has_many :friendships, dependent: :destroy
+  has_many :friends, through: :friendships
 
-  # 最近の友達を取得するメソッド
-  def recent_friends
-    friends.order('last_interaction_at DESC').limit(5)
-  end
+  has_many :chat_users
+  has_many :chats, through: :chat_users
+  has_many :messages
 
-  # 全友達リストを取得するメソッド
-  def all_friends
-    friends
-  end
+  has_many :sent_friend_requests, class_name: 'FriendRequest', foreign_key: 'sender_id', dependent: :destroy
+  has_many :received_friend_requests, class_name: 'FriendRequest', foreign_key: 'receiver_id', dependent: :destroy
+
+
+  # 部分一致名前検索
+  scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
 end

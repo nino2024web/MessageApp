@@ -6,6 +6,7 @@ ja:
       locked: "アカウントがロックされています。"
       inactive: "アカウントが有効化されていません。"
       unconfirmed: "メールアドレスの確認が必要です。"
+      timeout: "セッションの有効期限が切れました。再度ログインしてください。"
 
   activerecord:
     attributes:

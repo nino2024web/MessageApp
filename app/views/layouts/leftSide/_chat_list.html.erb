@@ -1,0 +1,21 @@
+  <!-- チャット一覧 -->
+<turbo-frame id="chat-list">
+  <div class="chat-list-container">
+    <% if all_chats.any? %>
+      <ul class="chat-history">
+        <% all_chats.each_with_index do |chat, index| %>
+          <li class="chat-item <%= 'hidden' if index >= 5 %>">
+            <a href="<%= chat_path(chat) %>">
+              <span class="chat-name"><%= chat.name %></span>
+              <span class="chat-preview">
+                <%= truncate(chat.messages.last&.content, length: 20) || 'メッセージなし' %>
+              </span>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="no-chat-message">まだチャットがありません。</p>
+    <% end %>
+  </div>
+</turbo-frame>

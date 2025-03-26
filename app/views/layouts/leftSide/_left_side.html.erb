@@ -1,27 +1,13 @@
 <div class="left-side">
-  <div class="recent-friends">
-    <h2>最近交流のある友達</h2>
-    <ul>
-      <% if @recent_friends.present? %>
-        <% @recent_friends.each do |friend| %>
-          <li><%= friend.name %></li>
-        <% end %>
-      <% else %>
-        <li>友達が登録されていません</li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-<div>test通過
-</div>
-
-
-<div class="left-side">
-  <h2>友達検索結果</h2>
-
-  <!-- Turbo Frame for Loading Search Results -->
-  <turbo-frame id="friend_search_results">
-    <!-- This part will be updated with search results -->
-    <p>友達を検索してください。</p>
+  <h3>チャット一覧</h3>
+  <%= render "layouts/leftSide/chat_list", all_chats: @all_chats %>
+  <h3>友達リスト</h3>
+  <%= render "layouts/leftSide/friend_list", all_friends: @all_friends %>
+  <h3>友達リクエスト</h3>
+  <%= render "layouts/leftSide/friend_requests", friend_requests: @friend_requests %>
+  <h3>友達検索</h3>
+  <%= render "layouts/leftSide/friend_search_form" %>
+  <turbo-frame id="search-results">
+    <%= render "layouts/leftSide/search_results", search_results: @search_results %>
   </turbo-frame>
 </div>

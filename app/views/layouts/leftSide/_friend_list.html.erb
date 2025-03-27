@@ -1,0 +1,16 @@
+  <!-- 友達リスト -->
+<turbo-frame id="friend-list">
+  <div class="friend-list-container">
+    <% if all_friends.any? %>
+      <ul class="friend-list">
+        <% all_friends.each_with_index do |friend, index| %>
+          <li class="friend-item <%= 'hidden' if index >= 5 %>">
+            <%= link_to friend.name, user_path(friend) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="no-chat-message">現在友達は未登録です</p>
+    <% end %>
+  </div>
+</turbo-frame>

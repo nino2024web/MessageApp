@@ -1,0 +1,20 @@
+  <!-- 友達リクエスト -->
+<turbo-frame id="friend-requests">
+  <div class="friend-requests-container">
+    <% if friend_requests.any? %>
+      <ul class="friend-requests">
+        <% friend_requests.each do |request| %>
+          <li class="request-item">
+            <span class="request-name"><%= request.sender.name %></span>
+            <div class="request-actions">
+              <%= button_to "承認", friend_request_path(request, status: "accepted"), method: :patch, class: "accept-btn", data: { turbo_frame: "friend-requests" } %>
+              <%= button_to "拒否", friend_request_path(request, status: "rejected"), method: :patch, class: "reject-btn", data: { turbo_frame: "friend-requests" } %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="no-chat-message">友達リクエストはありません。</p>
+    <% end %>
+  </div>
+</turbo-frame>

@@ -1,0 +1,23 @@
+  <!-- 検索結果 -->
+<turbo-frame id="search-results">
+  <% if params[:name].present? %>
+    <% if search_results.any? %>
+      <ul class="search-results">
+        <% search_results.each do |user| %>
+          <li class="search-item">
+            <%= link_to user.name, user_path(user) %>
+            <% if current_user.friends.include?(user) %>
+              <span class="friend-status">友達</span>
+            <% elsif current_user.sent_friend_requests.exists?(receiver_id: user.id) %>
+              <span class="friend-status">申請中</span>
+            <% else %>
+              <%= button_to "友達申請", friend_requests_path(receiver_id: user.id), method: :post, class: "request-btn" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="no-chat-message">該当するユーザーが見つかりませんでした。</p>
+    <% end %>
+  <% end %>
+</turbo-frame>

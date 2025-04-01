@@ -9,3 +9,21 @@ body {
   color: #333;
   line-height: 1.6;
 }
+
+.main-container {
+  display: flex;
+}
+
+.left-side {
+  width: 250px;
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-right: 1px solid #ddd;
+}
+
+.center-area {
+  flex: 1;
+  padding: 15px;
+  background-color: #fff;
+  min-height: 100vh;
+}

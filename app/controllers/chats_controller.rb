@@ -8,6 +8,11 @@ class ChatsController < ApplicationController
   def show
     @chat = Chat.find(params[:id])
     @messages = @chat.messages.includes(:user).order(created_at: :asc)
+
+    # 自分宛未読メッセージを既読に変更する
+    @chat.messages.where.not(user_id: current_user.id).update_all(read: true)
+
+    @messages = Message.new
   end
 
   def create

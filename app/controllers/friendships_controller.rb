@@ -21,4 +21,10 @@ class FriendsController < ApplicationController
     current_user.friends.destroy(friend)
     redirect_to friends_path
   end
+
+  def open_chat
+    friend = User.find(params[:friend_id])
+    chat = current_user.find_or_create_chat(friend)
+    redirect_to chat_path(chat)
+  end
 end

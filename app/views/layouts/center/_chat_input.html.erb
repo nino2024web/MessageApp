@@ -1,0 +1,11 @@
+<div class="chat-input">
+  <%= form_with model: @message, url: messages_path(chat_id: @chat.id), local: false do |f| %>
+    <%= f.text_area :content, placeholder: "800文字以内で入力してください", maxlength: 800, rows: 5 %>
+    <% if @message.errors[:content].any? %>
+      <div class="error-message">
+        <%= @message.errors[:content].join(', ') %>
+      </div>
+    <% end %>
+    <%= f.submit "送信", class: "send-btn" %>
+  <% end %>
+</div>

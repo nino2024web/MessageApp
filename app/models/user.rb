@@ -16,7 +16,21 @@ class User < ApplicationRecord
   has_many :sent_friend_requests, class_name: 'FriendRequest', foreign_key: 'sender_id', dependent: :destroy
   has_many :received_friend_requests, class_name: 'FriendRequest', foreign_key: 'receiver_id', dependent: :destroy
 
-
   # 部分一致名前検索
-  scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
+  scope :search_by_name, ->(name) { where('name LIKE ?', "%#{name}%") }
+
+  # メインチャットルーム
+  def find_or_create_chat(friend)
+    # 既存のチャットルームの有無を確認
+    existing_chat = chats.joins(:users).where(users: { id: friend.id }).first
+
+    return existing_chat if existing_chat.present?
+
+    # なければ新しく作成
+    chat = Chat.create!(name: "#{name} & #{friend.name}")
+    ChatUser.create!(user: self, chat:)
+    ChatUser.create!(user: friend, chat:)
+
+    chat
+  end
 end

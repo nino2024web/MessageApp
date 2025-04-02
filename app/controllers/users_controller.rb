@@ -10,8 +10,19 @@ class UsersController < ApplicationController
   end
 
   def search
-    @search_results = params[:name].present? ? User.search_by_name(params[:name]) : []
+    @search_results =
+      if params[:name].present?
+        User.search_by_name(params[:name]).where.not(id: current_user.id)
+      else
+        []
+      end
     render partial: 'layouts/leftSide/search_results', locals: { search_results: @search_results }
+  end
+
+  def start_chat
+    friend = User.find(params[:id])
+    chat = current_user.find_or_create_chat(friend)
+    redirect_to chat_path(chat)
   end
 
   private

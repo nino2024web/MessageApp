@@ -5,14 +5,14 @@
       <ul class="search-results">
         <% search_results.each do |user| %>
           <li class="search-item">
-            <%= link_to user.name, user_path(user) %>
             <% if current_user.friends.include?(user) %>
-              <span class="friend-status">友達</span>
-            <% elsif current_user.sent_friend_requests.exists?(receiver_id: user.id) %>
-              <span class="friend-status">申請中</span>
+              <%= button_to "チャット開始", start_chat_path(user), method: :post, class: "start-chat-btn" %>
             <% else %>
-              <%= button_to "友達申請", friend_requests_path(receiver_id: user.id), method: :post, class: "request-btn" %>
+              <span class="user-name"><%= user.name %></span>
             <% end %>
+            <turbo-frame id="friend-request-btn-<%= user.id %>">
+              <%= render "layouts/leftSide/request_button", user: user %>
+            </turbo-frame>
           </li>
         <% end %>
       </ul>

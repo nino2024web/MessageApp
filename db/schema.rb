@@ -79,8 +79,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
   add_foreign_key "chat_users", "users"
   add_foreign_key "friend_requests", "users", column: "receiver_id"
   add_foreign_key "friend_requests", "users", column: "sender_id"
-  add_foreign_key "friendships", "friends"
   add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
 end

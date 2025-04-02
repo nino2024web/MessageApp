@@ -58,6 +58,14 @@
     }
   }
 
+  .friend-item {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .search-bar {
     margin-top: 10px;
     display: flex;
@@ -99,6 +107,20 @@
       padding: 5px 8px;
       border: none;
       cursor: pointer;
+    }
+  }
+
+  .start-chat-btn {
+    background-color: #2196f3;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.85em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1976d2;
     }
   }
 

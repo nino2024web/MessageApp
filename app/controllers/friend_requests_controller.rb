@@ -12,7 +12,10 @@ class FriendRequestsController < ApplicationController
     friend_request = current_user.sent_friend_requests.build(receiver:)
 
     if friend_request.save
-      head :ok
+      render turbo_stream: turbo_stream.replace(
+        "friend-request-btn-#{receiver.id}",
+        partial: 'layouts/leftSide/request_button', locals: { user: receiver }
+      )
     else
       render json: { error: '友達申請に失敗しました' }, status: :unprocessable_entity
     end

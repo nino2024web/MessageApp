@@ -12,6 +12,7 @@ body {
 
 .main-container {
   display: flex;
+  height: calc(100vh - 50px);
 }
 
 .left-side {

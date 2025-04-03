@@ -21,7 +21,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.string "name"
+    t.integer "user1_id", null: false
+    t.integer "user2_id", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -49,11 +51,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
   create_table "messages", force: :cascade do |t|
     t.text "content"
     t.integer "user_id", null: false
-    t.integer "conversation_id", null: false
+    t.integer "chat_id", null: false
     t.boolean "read"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
@@ -81,6 +83,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
   add_foreign_key "friend_requests", "users", column: "sender_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
-  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
 end

@@ -3,10 +3,12 @@
   <div class="friend-list-container">
     <% if all_friends.any? %>
       <ul class="friend-list">
-        <li class="friend-item <%= 'hidden' if index >= 5 %>">
-          <span><%= friend.name %></span>
-          <%= button_to "チャット開始", start_chat_path(friend), method: :post, class: "start-chat-btn" %>
-        </li>
+        <% all_friends.each_with_index do |friend, index| %>
+          <li class="friend-item <%= 'hidden' if index >= 5 %>">
+            <span><%= friend.name %></span>
+            <%= button_to "チャットを始める", start_chat_user_path(friend), method: :post, data: { turbo: false } %>
+          </li>
+        <% end %>
       </ul>
     <% else %>
       <p class="no-chat-message">現在友達は未登録です</p>

@@ -6,7 +6,7 @@
         <% search_results.each do |user| %>
           <li class="search-item">
             <% if current_user.friends.include?(user) %>
-              <%= button_to "チャット開始", start_chat_path(user), method: :post, class: "start-chat-btn" %>
+              <%= button_to "チャットを始める", start_chat_user_path(user), method: :post, data: { turbo: false } %>
             <% else %>
               <span class="user-name"><%= user.name %></span>
             <% end %>

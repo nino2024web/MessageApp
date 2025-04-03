@@ -2,6 +2,8 @@ class FriendRequest < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
 
+  scope :pending, -> { where(status: 'pending') }
+
   after_create_commit -> { broadcast_update }
   after_update_commit -> { broadcast_update }
 

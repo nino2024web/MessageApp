@@ -1,7 +1,7 @@
   <!-- 友達リクエスト -->
 <turbo-frame id="friend-requests">
   <div class="friend-requests-container">
-    <% if friend_requests.any? %>
+    <% if friend_requests&.any? %>
       <ul class="friend-requests">
         <% friend_requests.each do |request| %>
           <li class="request-item">

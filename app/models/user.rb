@@ -27,10 +27,8 @@ class User < ApplicationRecord
     return existing_chat if existing_chat.present?
 
     # なければ新しく作成
-    chat = Chat.create!(name: "#{name} & #{friend.name}")
-    ChatUser.create!(user: self, chat:)
-    ChatUser.create!(user: friend, chat:)
-
-    chat
+    Chat.find_or_create_by(user1_id: id, user2_id: friend.id) do |c|
+      c.name = "#{name}_#{friend.name}"
+    end
   end
 end

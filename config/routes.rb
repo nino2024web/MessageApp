@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: 'users#show'
+
   post 'users/search', to: 'users#search', as: :search_users
   post 'friends/:friend_id/open_chat', to: 'friendships#open_chat', as: :open_chat_with_friend
 
@@ -17,4 +19,5 @@ Rails.application.routes.draw do
   resources :messages, only: [:create]
   resources :friends, only: [:index]
   resources :friend_requests, only: %i[create update]
+  resources :blocks, only: %i[create destroy]
 end

@@ -1,4 +1,5 @@
 <div class="left-side">
+  <%= turbo_stream_from "friend_list_#{current_user.id}" %>
   <h3>チャット一覧</h3>
   <%= render "layouts/leftSide/chat_list", all_chats: @all_chats %>
   <h3>友達リスト</h3>

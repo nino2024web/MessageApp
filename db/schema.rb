@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_04_165440) do
+  create_table "blocks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "blocked_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blocked_user_id"], name: "index_blocks_on_blocked_user_id"
+    t.index ["user_id", "blocked_user_id"], name: "index_blocks_on_user_id_and_blocked_user_id", unique: true
+    t.index ["user_id"], name: "index_blocks_on_user_id"
+  end
+
   create_table "chat_users", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "chat_id", null: false
@@ -77,6 +87,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_09_153733) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "blocks", "users"
+  add_foreign_key "blocks", "users", column: "blocked_user_id"
   add_foreign_key "chat_users", "chats"
   add_foreign_key "chat_users", "users"
   add_foreign_key "friend_requests", "users", column: "receiver_id"

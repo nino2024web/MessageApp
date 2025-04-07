@@ -5,10 +5,9 @@
       <ul class="search-results">
         <% search_results.each do |user| %>
           <li class="search-item">
+            <span class="user-name"><%= user.name %></span>
             <% if current_user.friends.include?(user) %>
               <%= button_to "チャットを始める", start_chat_user_path(user), method: :post, data: { turbo: false } %>
-            <% else %>
-              <span class="user-name"><%= user.name %></span>
             <% end %>
             <turbo-frame id="friend-request-btn-<%= user.id %>">
               <%= render "layouts/leftSide/request_button", user: user %>

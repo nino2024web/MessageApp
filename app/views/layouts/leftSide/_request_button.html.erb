@@ -1,7 +1,7 @@
   <!-- buttonクリック後、非同期にて切り替え -->
 <% if current_user.friends.include?(user) %>
   <span class="friend-status">友達</span>
-<% elsif current_user.sent_friend_requests.exists?(receiver_id: user.id) %>
+<% elsif current_user.sent_friend_requests.where(receiver_id: user.id, status: 'pending').exists? %>
   <span class="friend-status">申請中</span>
 <% else %>
   <%= button_to "友達申請", friend_requests_path(receiver_id: user.id), method: :post, class: "request-btn", data: { turbo_frame: "friend-request-btn-#{user.id}" } %>

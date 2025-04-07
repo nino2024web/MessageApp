@@ -1,20 +1,21 @@
   <!-- 友達リクエスト -->
-<turbo-frame id="friend-requests">
-  <div class="friend-requests-container">
-    <% if friend_requests&.any? %>
-      <ul class="friend-requests">
-        <% friend_requests.each do |request| %>
-          <li class="request-item">
-            <span class="request-name"><%= request.sender.name %></span>
-            <div class="request-actions">
-              <%= button_to "承認", friend_request_path(request, status: "accepted"), method: :patch, class: "accept-btn", data: { turbo_frame: "friend-requests" } %>
-              <%= button_to "拒否", friend_request_path(request, status: "rejected"), method: :patch, class: "reject-btn", data: { turbo_frame: "friend-requests" } %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="no-chat-message">友達リクエストはありません。</p>
-    <% end %>
-  </div>
-</turbo-frame>
+<div class="friend-requests-container" id="friend-requests">
+  <% if friend_requests.any? %>
+    <ul class="friend-requests">
+      <% friend_requests.each do |request| %>
+        <% next if request.status != 'pending' %>
+        <li class="request-item">
+          <span class="request-name"><%= request.sender.name %></span>
+          <div class="request-actions">
+            <%= button_to "承認", friend_request_path(request, status: "accepted"), method: :patch, class: "accept-btn" %>
+            <%= button_to "拒否", friend_request_path(request, status: "rejected"),
+              method: :patch, data: { turbo: false }, class: "reject-btn" %>
+            <%= button_to "ブロック", blocks_path(blocked_user_id: request.sender.id), method: :post, class: "block-btn" %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="no-chat-message">友達リクエストはありません。</p>
+  <% end %>
+</div>

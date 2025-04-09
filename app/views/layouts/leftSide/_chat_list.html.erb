@@ -6,9 +6,9 @@
         <% all_chats.each_with_index do |chat, index| %>
           <li class="chat-item <%= 'hidden' if index >= 5 %>">
             <a href="<%= chat_path(chat) %>">
-              <span class="chat-name"><%= chat.name %></span>
+              <span class="chat-name"><%= chat.other_user(current_user).name %></span>
               <span class="chat-preview">
-                <%= truncate(chat.messages.last&.content, length: 20) || 'メッセージなし' %>
+                <%= truncate(chat.messages.last&.content, length: 20) %>
               </span>
             </a>
           </li>

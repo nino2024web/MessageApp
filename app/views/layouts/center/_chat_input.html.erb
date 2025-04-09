@@ -1,5 +1,7 @@
-<%= form_with url: messages_path(chat_id: @chat.id), local: true, data: { turbo: false } do |f| %>
-  <%= f.text_area :content, name: 'message[content]' %>
-  <%= f.hidden_field :chat_id, value: @chat.id, name: 'message[chat_id]' %>
-  <%= f.submit "送信" %>
-<% end %>
+<div class="chat-input-container" id="chat-input">
+  <%= form_with url: messages_path(chat_id: @chat.id), method: :post, data: { turbo_stream: true } do |f| %>
+    <%= f.text_area :content, rows: 2, class: 'chat-textarea', placeholder: "メッセージを入力...", name: 'message[content]' %>
+    <%= f.hidden_field :chat_id, value: @chat.id, name: 'message[chat_id]' %>
+    <%= f.submit "送信", class: 'chat-submit-btn' %>
+  <% end %>
+</div>

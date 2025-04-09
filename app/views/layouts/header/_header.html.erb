@@ -4,4 +4,7 @@
       ようこそ、<%= current_user.name %> さん！
     </span>
   </div>
+  <div class="logout-button">
+    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, 'data-turbo-frame': '_top', class: "logout-link" %>
+  </div>
 </header>

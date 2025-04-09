@@ -10,15 +10,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    if params[:name].present?
-      # ブロック関係のユーザーを除外（ブロックした・された両方）
-      blocked_user_ids = current_user.blocked_users.pluck(:id) + current_user.blockers.pluck(:id)
-
-      @search_results = User.search_by_name(params[:name])
-                            .where.not(id: blocked_user_ids + [current_user.id])
-    else
-      @search_results = []
-    end
+    @search_results = params[:name].present? ? perform_search : []
     render partial: 'layouts/leftSide/search_results', locals: { search_results: @search_results }
   end
 

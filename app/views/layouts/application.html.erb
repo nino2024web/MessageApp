@@ -11,9 +11,6 @@
   <body>
     <% if user_signed_in? %>
       <%= yield %>
-      <li>
-        <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, 'data-turbo-frame': '_top' %>
-      </li>
     <% else %>
       <%= yield %>
     <% end %>

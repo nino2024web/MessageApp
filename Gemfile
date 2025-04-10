@@ -28,7 +28,6 @@ gem 'jbuilder'
 gem 'devise'
 
 gem 'carmen-rails'
-gem 'country_select'
 
 gem 'sassc-rails'
 

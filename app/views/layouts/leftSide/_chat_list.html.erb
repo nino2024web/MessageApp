@@ -3,14 +3,14 @@
   <div class="chat-list-container">
     <% if all_chats.any? %>
       <ul class="chat-history">
-        <% all_chats.each_with_index do |chat, index| %>
+        <% all_chats.uniq { |chat| chat.other_user(current_user).id }.each_with_index do |chat, index| %>
           <li class="chat-item <%= 'hidden' if index >= 5 %>">
-            <a href="<%= chat_path(chat) %>">
+            <%= link_to chat_path(chat), data: { turbo_frame: "_top" } do %>
               <span class="chat-name"><%= chat.other_user(current_user).name %></span>
               <span class="chat-preview">
-                <%= truncate(chat.messages.last&.content, length: 20) %>
+                <%= truncate(chat.messages.last&.content, length: 5) %>
               </span>
-            </a>
+            <% end %>
           </li>
         <% end %>
       </ul>

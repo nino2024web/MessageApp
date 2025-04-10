@@ -11,9 +11,10 @@ class Chat < ApplicationRecord
     messages.order(created_at: :desc).limit(1).pluck(:content).first
   end
 
-  # ユーザーの未読メッセージを表示
-  def unread_messages_count_for(user)
-    messages.where(user:, read: false).count
+  def self.between(user_a, user_b)
+    where(user1: user_a, user2: user_b)
+      .or(where(user1: user_b, user2: user_a))
+      .first
   end
 
   def other_user(current_user)

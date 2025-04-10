@@ -11,19 +11,22 @@ class ChatsController < ApplicationController
     @all_chats = Chat.where(user1_id: current_user.id).or(Chat.where(user2_id: current_user.id))
     @all_friends = current_user.friends
     @friend_requests = current_user.received_friend_requests.pending.includes(:sender)
-    # 自分宛未読メッセージを既読に変更する
-    @chat.messages.where.not(user_id: current_user.id).update_all(read: true)
 
     @message = Message.new
   end
 
   def create
-    @chat = Chat.new(chat_params)
-    if @chat.save
-      redirect_to @chat
-    else
-      render :new
-    end
+    user1 = current_user
+    # 👈 相手ユーザーのIDを受け取る
+    user2 = User.find(params[:user_id])
+
+    # すでにチャットがあるか探す
+    @chat = Chat.between(user1, user2)
+
+    # なければ新しく作成
+    @chat ||= Chat.create(user1:, user2:)
+
+    redirect_to @chat
   end
 
   private

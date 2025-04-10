@@ -1,13 +1,8 @@
 <div id="chat-messages" class="chat-messages">
-  <% if messages.empty? %>
-    <p class="no-message">まだメッセージがありません</p>
-  <% else %>
-    <% messages.each do |message| %>
-      <div class="message <%= message.user_id == current_user.id ? 'mine' : 'theirs' %>">
-        <p class="content"><%= message.content %></p>
-        <p class="timestamp"><%= message.created_at.strftime("%Y/%m/%d %H:%M") %></p>
-      </div>
-    <% end %>
+  <% messages.each do |message| %>
+    <div class="message <%= message.user_id == current_user.id ? 'own-message' : 'other-message' %>">
+      <p class="content"><%= message.content %></p>
+      <p class="timestamp"><%= message.created_at.strftime("%Y/%m/%d %H:%M") %></p>
+    </div>
   <% end %>
-  <div id="scroll-anchor"></div>
 </div>

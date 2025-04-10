@@ -2,18 +2,16 @@
   <template>
     <div class="message own-message">
       <p class="content"><%= @saved_message.content %></p>
-      <p class="timestamp">
-        <%= @saved_message.created_at.strftime("%Y/%m/%d %H:%M") %>
-      </p>
+      <p class="timestamp"><%= @saved_message.created_at.strftime("%Y/%m/%d %H:%M") %></p>
     </div>
   </template>
 </turbo-stream>
 <turbo-stream action="append" target="chat-messages">
   <template>
-    <div id="scroll-anchor"></div>
+    <div data-controller="scroll"></div>
   </template>
 </turbo-stream>
-<turbo-stream action="replace " target="chat-input">
+<turbo-stream action="replace" target="chat-input">
   <template>
     <%= render partial: 'layouts/center/chat_input', formats: :html, locals: { chat: @chat, message: @message } %>
   </template>

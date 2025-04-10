@@ -5,7 +5,7 @@
       <% all_friends.each_with_index do |friend, index| %>
         <li class="friend-item <%= 'hidden' if index >= 5 %>">
           <span><%= friend.name %></span>
-          <%= button_to "チャットを始める", start_chat_user_path(friend), method: :post %>
+          <%= button_to "チャット開始", start_chat_user_path(friend), method: :post %>
         </li>
       <% end %>
     </ul>

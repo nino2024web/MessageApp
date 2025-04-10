@@ -25,11 +25,6 @@ gem 'stimulus-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 
-# SQLite3 は開発・テスト環境でのみ使用
-group :development, :test do
-  gem 'sqlite3', '~> 1.4'
-end
-
 gem 'devise'
 
 gem 'carmen-rails'
@@ -80,6 +75,11 @@ group :test do
 end
 
 gem 'net-pop'
+
+# SQLite3 は開発・テスト環境でのみ使用
+group :development, :test do
+  gem 'sqlite3', '~> 1.4'
+end
 
 # Heroku用本番環境ではPostgreSQLを使う
 group :production do

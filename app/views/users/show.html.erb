@@ -1,0 +1,11 @@
+  <!-- ログイン後のheader上部 -->
+<%= render "layouts/header/header" %>
+<!-- 左部friend詳細  中央メインチャット -->
+<div class="main-container">
+  <%= render "layouts/leftSide/left_side" %>
+  <% if @chat.present? %>
+    <%= render "layouts/center/center" %>
+  <% else %>
+    <p class="center-placeholder">チャットを選択してください</p>
+  <% end %>
+</div>

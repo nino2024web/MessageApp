@@ -1,0 +1,15 @@
+  <!-- 友達リスト -->
+<div class="friend-list-container" id="friend-list">
+  <% if all_friends.any? %>
+    <ul class="friend-list">
+      <% all_friends.each_with_index do |friend, index| %>
+        <li class="friend-item <%= 'hidden' if index >= 5 %>">
+          <span><%= friend.name %></span>
+          <%= button_to "チャット開始", start_chat_user_path(friend), method: :post %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="no-chat-message">現在友達は未登録です</p>
+  <% end %>
+</div>

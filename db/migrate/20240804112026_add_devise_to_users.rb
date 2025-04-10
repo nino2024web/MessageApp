@@ -29,8 +29,8 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.1]
     end
 
     # 既に存在するインデックスも確認し、必要に応じてコメントアウトまたは削除
-    add_index :users, :email,                unique: true unless index_exists?(:users, :email)
-    add_index :users, :reset_password_token, unique: true unless index_exists?(:users, :reset_password_token)
+    # add_index :users, :email,                unique: true unless index_exists?(:users, :email)
+    # add_index :users, :reset_password_token, unique: true unless index_exists?(:users, :reset_password_token)
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
   end

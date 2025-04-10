@@ -1,0 +1,5 @@
+<%= render "layouts/header/header" %>
+<div class="main-container">
+  <%= render "layouts/leftSide/left_side",all_chats: @all_chats,all_friends: @all_friends,friend_requests: @friend_requests %>
+  <%= render "layouts/center/center", chat: @chat, messages: @messages %>
+</div>

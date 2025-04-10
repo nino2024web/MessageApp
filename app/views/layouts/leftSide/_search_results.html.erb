@@ -1,0 +1,22 @@
+  <!-- 検索結果 -->
+<turbo-frame id="search-results">
+  <% if params[:name].present? %>
+    <% if search_results.any? %>
+      <ul class="search-results">
+        <% search_results.each do |user| %>
+          <li class="search-item">
+            <span class="user-name"><%= user.name %></span>
+            <% if current_user.friends.include?(user) %>
+              <%= button_to "チャットを始める", start_chat_user_path(user), method: :post, data: { turbo: false } %>
+            <% end %>
+            <turbo-frame id="friend-request-btn-<%= user.id %>">
+              <%= render "layouts/leftSide/request_button", user: user %>
+            </turbo-frame>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="no-chat-message">該当するユーザーが見つかりませんでした。</p>
+    <% end %>
+  <% end %>
+</turbo-frame>

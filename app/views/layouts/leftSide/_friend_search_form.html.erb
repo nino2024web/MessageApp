@@ -1,0 +1,5 @@
+  <!-- 友達検索 -->
+<%= form_with url: search_users_path, method: :post, local: false, data: { turbo_frame: "search-results" }, class: "search-bar", local: false do |f| %>
+  <%= f.text_field :name, placeholder: "名前で検索", class: "search-input" %>
+  <%= f.submit "検索", class: "search-button" %>
+<% end %>

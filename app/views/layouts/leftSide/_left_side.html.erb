@@ -1,0 +1,14 @@
+<div class="left-side">
+  <%= turbo_stream_from "friend_list_#{current_user.id}" %>
+  <h3>チャット一覧</h3>
+  <%= render "layouts/leftSide/chat_list", all_chats: @all_chats %>
+  <h3>友達リスト</h3>
+  <%= render "layouts/leftSide/friend_list", all_friends: @all_friends %>
+  <h3>友達リクエスト</h3>
+  <%= render "layouts/leftSide/friend_requests", friend_requests: @friend_requests %>
+  <h3>友達検索</h3>
+  <%= render "layouts/leftSide/friend_search_form" %>
+  <turbo-frame id="search-results">
+    <%= render "layouts/leftSide/search_results", search_results: @search_results %>
+  </turbo-frame>
+</div>

@@ -1,9 +1,23 @@
 Rails.application.routes.draw do
-  root "home#index"
+  root to: 'users#show'
 
-  devise_for :users
+  post 'users/search', to: 'users#search', as: :search_users
+  post 'friends/:friend_id/open_chat', to: 'friendships#open_chat', as: :open_chat_with_friend
 
-  resources :conversations, only: [:index, :show, :new, :create] do
-    resources :messages, only: [:create]
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
+  }
+
+  resources :users, only: [:show] do
+    member do
+      post 'start_chat'
+    end
   end
+
+  resources :chats, only: %i[index show]
+  resources :messages, only: [:create]
+  resources :friends, only: [:index]
+  resources :friend_requests, only: %i[create update]
+  resources :blocks, only: %i[create destroy]
 end

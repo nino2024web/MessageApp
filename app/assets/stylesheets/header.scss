@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e0f7fa;
+  padding: 10px 20px;
+
+  .user-name {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .logout-link {
+    background-color: #f44336;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+}

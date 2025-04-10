@@ -35,7 +35,6 @@ gem 'country_select'
 
 gem "sassc-rails"
 
-
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -77,3 +76,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'net-pop'

@@ -26,7 +26,13 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem 'sqlite3', '~> 1.4'
+
 gem "devise"
+
+gem 'carmen-rails'
+gem 'country_select'
+
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"

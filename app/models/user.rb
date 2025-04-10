@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+devise :database_authenticatable, :registerable,
+        :recoverable, :rememberable, :validatable
 
-         validates :country, presence: true
 end

@@ -13,13 +13,13 @@ class FriendshipsController < ApplicationController
   def create
     friend = User.find(params[:friend_id])
     current_user.friends << friend unless current_user.friends.include?(friend)
-    redirect_to friends_path
+    redirect_to friendships_path
   end
 
   def destroy
     friend = User.find(params[:id])
     current_user.friends.destroy(friend)
-    redirect_to friends_path
+    redirect_to friendships_path
   end
 
   def open_chat

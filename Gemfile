@@ -25,7 +25,10 @@ gem 'stimulus-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 
-gem 'sqlite3', '~> 1.4'
+# SQLite3 は開発・テスト環境でのみ使用
+group :development, :test do
+  gem 'sqlite3', '~> 1.4'
+end
 
 gem 'devise'
 

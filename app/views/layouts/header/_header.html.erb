@@ -5,6 +5,6 @@
     </span>
   </div>
   <div class="logout-button">
-    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo: false }, class: "logout-link" %>
+    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_frame: "_top" }, class: "logout-link" %>
   </div>
 </header>

@@ -54,6 +54,7 @@ gem 'rubocop', require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do
@@ -74,11 +75,6 @@ group :test do
 end
 
 gem 'net-pop'
-
-# SQLite3 は開発・テスト環境でのみ使用
-group :development, :test do
-  gem 'sqlite3', '~> 1.4'
-end
 
 # Heroku用本番環境ではPostgreSQLを使う
 group :production do

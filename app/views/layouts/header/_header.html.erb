@@ -4,7 +4,16 @@
       ようこそ、<%= current_user.name %> さん！
     </span>
   </div>
+   <% if @chat.present? %>
+    <div class="chat-title">
+      <%= @chat.other_user(current_user).name %>さんとチャットしています。
+    </div>
+  <% end %>
   <div class="logout-button">
-    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, 'data-turbo-frame': '_top', class: "logout-link" %>
+    <%= link_to "ログアウト", destroy_user_session_path,
+            method: :delete,
+            data: { turbo_method: :delete, turbo_frame: "_top" },
+            class: "logout-link" %>
+
   </div>
 </header>

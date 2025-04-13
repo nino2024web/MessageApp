@@ -7,10 +7,17 @@
         <li class="request-item">
           <span class="request-name"><%= request.sender.name %></span>
           <div class="request-actions">
-            <%= button_to "承認", friend_request_path(request, status: "accepted"), method: :patch, class: "accept-btn" %>
-            <%= button_to "拒否", friend_request_path(request, status: "rejected"),
-              method: :patch, data: { turbo: false }, class: "reject-btn" %>
-            <%= button_to "ブロック", blocks_path(blocked_user_id: request.sender.id), method: :post, class: "block-btn" %>
+            <%= form_with url: friend_request_path(request, status: "accepted"),
+                  method: :patch,
+                  data: {
+                    controller: "friend-request",
+                    action: "turbo:submit-end->friend-request#remove"
+                  },
+                  class: "accept-form" do %>
+            <%= submit_tag "承認", class: "accept-btn" %>
+            <% end %>
+            <%= button_to "拒否", friend_request_path(request, status: "rejected"),method: :patch, data: { turbo: false }, class: "reject-btn" %>
+            <%= button_to "ブロック", blocks_path(blocked_user_id: request.sender.id),method: :post, class: "block-btn" %>
           </div>
         </li>
       <% end %>

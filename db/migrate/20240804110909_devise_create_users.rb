@@ -2,11 +2,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
   def change
     create_table :users do |t|
       ## Database authenticatable
-      t.string :email,              null: false, default: ""
-      t.string :encrypted_password, null: false, default: ""
-      t.string :country, null: false, default: ""
-      t.string :country_code, null: false, default: ""
-      t.string :name, null: false, default: ""
+      t.string :email,              null: false, default: ''
+      t.string :encrypted_password, null: false, default: ''
+      t.string :name, null: false, default: ''
 
       ## Recoverable
       t.string   :reset_password_token
@@ -25,7 +23,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
       t.string   :unconfirmed_email
-
 
       t.timestamps null: false
     end

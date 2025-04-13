@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   resources :chats, only: %i[index show]
   resources :messages, only: [:create]
-  resources :friends, only: [:index]
+  resources :friendships, only: [:index]
   resources :friend_requests, only: %i[create update]
   resources :blocks, only: %i[create destroy]
 end

@@ -4,6 +4,11 @@
       ようこそ、<%= current_user.name %> さん！
     </span>
   </div>
+   <% if @chat.present? %>
+    <div class="chat-title">
+      <%= @chat.other_user(current_user).name %>さんとチャットしています。
+    </div>
+  <% end %>
   <div class="logout-button">
     <%= link_to "ログアウト", destroy_user_session_path,
             method: :delete,

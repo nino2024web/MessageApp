@@ -1,13 +1,25 @@
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #e0f7fa;
   padding: 10px 20px;
+  z-index: 1000;
 
   .user-name {
     font-weight: bold;
     color: #333;
+  }
+
+  .chat-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
   }
 
   .logout-link {

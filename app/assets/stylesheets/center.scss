@@ -8,19 +8,6 @@
   height: 100vh;
 }
 
-/* 🔹 ヘッダー部分 */
-.chat-header {
-  padding: 10px 15px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #ddd;
-
-  .chat-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-}
-
 /* 🔹 メッセージ表示部分 */
 .chat-messages {
   .message {

@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def start_chat
     friend = User.find(params[:id])
     chat = Chat.between(current_user, friend)
-    chat ||= Chat.create(user1: current_user, user2: friend)
+    chat ||= Chat.create(user1: current_user, user2: friend, name: "#{current_user.name} & #{friend.name}")
     redirect_to chat_path(chat)
   end
 

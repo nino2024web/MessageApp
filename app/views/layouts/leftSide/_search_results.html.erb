@@ -18,5 +18,7 @@
     <% else %>
       <p class="no-chat-message">該当するユーザーが見つかりませんでした。</p>
     <% end %>
+  <% elsif params[:name] == "" %>
+    <p class="no-chat-message">名前を入力してください。</p>
   <% end %>
 </turbo-frame>

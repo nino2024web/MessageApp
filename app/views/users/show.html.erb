@@ -1,5 +1,10 @@
   <!-- ログイン後のheader上部 -->
 <%= render "layouts/header/header" %>
+<!-- リアルタイム反映 -->
+<%= turbo_stream_from "chat_#{@chat.id}" if @chat.present? %>
+<%= turbo_stream_from "chat_list_#{current_user.id}" %>
+<%= turbo_stream_from "friend_list_#{current_user.id}" %>
+<%= turbo_stream_from "friend_requests_#{current_user.id}" %>
 <!-- 左部friend詳細  中央メインチャット -->
 <div class="main-container">
   <%= render "layouts/leftSide/left_side" %>

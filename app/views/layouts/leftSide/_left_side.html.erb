@@ -1,7 +1,7 @@
 <div class="left-side">
   <%= turbo_stream_from "friend_list_#{current_user.id}" %>
   <h3>チャット一覧</h3>
-  <%= render "layouts/leftSide/chat_list", all_chats: @all_chats %>
+  <%= render "layouts/leftSide/chat_list", all_chats: @all_chats, current_user: current_user %>
   <h3>友達リスト</h3>
   <%= render "layouts/leftSide/friend_list", all_friends: @all_friends %>
   <h3>友達リクエスト</h3>

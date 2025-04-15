@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :chats, only: %i[index show]
   resources :messages, only: [:create]
   resources :friendships, only: [:index]
   resources :friend_requests, only: %i[create update]

@@ -5,7 +5,7 @@
       <ul class="chat-history">
         <% all_chats.uniq { |chat| chat.other_user(current_user).id }.each_with_index do |chat, index| %>
           <li class="chat-item <%= 'hidden' if index >= 5 %>">
-            <%= link_to chat_path(chat), data: { turbo_frame: "_top" } do %>
+            <%= link_to user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" } do %>
               <span class="chat-name"><%= chat.other_user(current_user).name %></span>
               <span class="chat-preview">
                 <%= truncate(chat.messages.last&.content, length: 5) %>

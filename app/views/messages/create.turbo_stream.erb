@@ -1,13 +1,5 @@
 <turbo-stream action="append" target="chat-messages">
   <template>
-    <div class="message own-message">
-      <p class="content"><%= @saved_message.content %></p>
-      <p class="timestamp"><%= @saved_message.created_at.strftime("%Y/%m/%d %H:%M") %></p>
-    </div>
-  </template>
-</turbo-stream>
-<turbo-stream action="append" target="chat-messages">
-  <template>
     <div data-controller="scroll"></div>
   </template>
 </turbo-stream>

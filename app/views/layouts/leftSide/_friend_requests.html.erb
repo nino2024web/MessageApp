@@ -5,7 +5,9 @@
       <% friend_requests.each do |request| %>
         <% next if request.status != 'pending' %>
         <li class="request-item">
-          <span class="request-name"><%= request.sender.name %></span>
+          <div class="request-name">
+            <%= request.sender.name %>
+          </div>
           <div class="request-actions">
             <%= form_with url: friend_request_path(request, status: "accepted"),
                   method: :patch,
@@ -14,7 +16,7 @@
                     action: "turbo:submit-end->friend-request#remove"
                   },
                   class: "accept-form" do %>
-            <%= submit_tag "承認", class: "accept-btn" %>
+              <%= submit_tag "承認", class: "accept-btn" %>
             <% end %>
             <%= button_to "拒否", friend_request_path(request, status: "rejected"),method: :patch, data: { turbo: false }, class: "reject-btn" %>
             <%= button_to "ブロック", blocks_path(blocked_user_id: request.sender.id),method: :post, class: "block-btn" %>

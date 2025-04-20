@@ -1,5 +1,5 @@
-<div style="margin-top:70px;"></div>
 <div id="chat-messages" class="chat-messages">
+<div style="margin-top:70px"></div>
   <% messages.each do |message| %>
     <div class="message <%= message.user_id == current_user.id ? 'own-message' : 'other-message' %>">
       <p class="content"><%= message.content %></p>
@@ -7,3 +7,8 @@
     </div>
   <% end %>
 </div>
+<turbo-stream action="append" target="chat-messages">
+  <template>
+    <div data-controller="scroll"></div>
+  </template>
+</turbo_stream>

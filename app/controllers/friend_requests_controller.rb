@@ -29,12 +29,35 @@ class FriendRequestsController < ApplicationController
   end
 
   def update
-    friend_request = FriendRequest.find(params[:id])
-    process_request(friend_request)
+    @friend_request = FriendRequest.find(params[:id])
+    process_request(@friend_request)
     update_friend_requests
+
     respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to request.referer || user_path(current_user) }
+      format.turbo_stream do
+        if params[:status] == 'accepted'
+          if current_user.friends.count == 1
+            render turbo_stream: turbo_stream.replace(
+              'friend-list',
+              partial: 'layouts/leftSide/friend_list',
+              locals: { all_friends: current_user.friends }
+            )
+          else
+            render turbo_stream: turbo_stream.append(
+              'friend-list',
+              partial: 'layouts/leftSide/friend_item',
+              locals: { friend: @friend_request.sender }
+            )
+          end
+        else
+          render turbo_stream: turbo_stream.replace(
+            'friend-requests',
+            partial: 'layouts/leftSide/friend_requests',
+            locals: { friend_requests: current_user.received_friend_requests.pending }
+          )
+        end
+      end
+      format.html { redirect_to request.referrer || user_path(current_user) }
     end
   end
 

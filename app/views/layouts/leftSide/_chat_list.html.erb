@@ -5,11 +5,17 @@
       <ul class="chat-history">
         <% all_chats.uniq { |chat| chat.other_user(current_user).id }.each_with_index do |chat, index| %>
           <li class="chat-item <%= 'hidden' if index >= 5 %>">
-            <%= link_to user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" } do %>
-              <span class="chat-name"><%= chat.other_user(current_user).name %></span>
-              <span class="chat-preview">
-                <%= truncate(chat.messages.last&.content, length: 5) %>
+            <%= link_to user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
+              <span class="chat-left">
+                <span class="chat-name">
+                  <%= chat.other_user(current_user).name %>
+                  <% unread_count = chat.unread_count_for(current_user) %>
+                  <% if unread_count > 0 %>
+                    <span class="unread-badge">未読数🔴<%= unread_count %></span>
+                  <% end %>
+                </span>
               </span>
+              <span class="chat-preview"><%= truncate(chat.messages.last&.content, length: 5) %></span>
             <% end %>
           </li>
         <% end %>

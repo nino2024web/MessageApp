@@ -20,4 +20,12 @@ class Chat < ApplicationRecord
   def other_user(current_user)
     user1 == current_user ? user2 : user1
   end
+
+  def unread_count_for(user)
+    messages
+      .where.not(user_id: user.id)
+      .left_joins(:message_reads)
+      .where(message_reads: { user_id: nil })
+      .count
+  end
 end

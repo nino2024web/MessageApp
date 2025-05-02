@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     load_user_data
     load_chat_data if params[:chat_id].present?
+    mark_messages_as_read if @chat.present?
   end
 
   def search
@@ -17,6 +18,17 @@ class UsersController < ApplicationController
     friend = User.find(params[:id])
     chat = find_or_create_chat(friend)
     redirect_to user_path(current_user, chat_id: chat.id)
+  end
+
+  def mark_messages_as_read
+    unread_messages = @chat.messages
+                           .where.not(user_id: current_user.id)
+                           .left_joins(:message_reads)
+                           .where(message_reads: { user_id: nil })
+
+    unread_messages.each do |message|
+      MessageRead.create(user: current_user, message: message)
+    end
   end
 
   private

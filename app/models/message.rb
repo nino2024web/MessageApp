@@ -1,7 +1,11 @@
 class Message < ApplicationRecord
   belongs_to :user
   belongs_to :chat
+
+  has_many :message_reads, dependent: :destroy
+
   after_create_commit -> { chat.touch(:updated_at) } # メッセージが送られたらチャットの更新日時を変更
+  after_create_commit :touch_chat_and_broadcast
 
   # 投稿文字数最大800文字
   validates :content, presence: true, length: { maximum: 800 }
@@ -23,6 +27,22 @@ class Message < ApplicationRecord
   end
 
   private
+
+  def touch_chat_and_broadcast
+    chat.touch
+    broadcast_chat_list
+  end
+
+  def broadcast_chat_list
+    chat.users.each do |user|
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "friend_list_#{user.id}",
+        target: 'chat-list',
+        partial: 'layouts/leftSide/chat_list',
+        locals: { all_chats: user.chats.order(updated_at: :desc), current_user: user }
+      )
+    end
+  end
 
   def broadcast_update
     chat_users = chat.users

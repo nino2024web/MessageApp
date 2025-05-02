@@ -7,6 +7,8 @@ ja:
       inactive: "アカウントが有効化されていません。"
       unconfirmed: "メールアドレスの確認が必要です。"
       timeout: "セッションの有効期限が切れました。再度ログインしてください。"
+      user:
+        unauthenticated: "ログインまたは会員登録してください"
 
   activerecord:
     attributes:
@@ -19,8 +21,8 @@ ja:
         user:
           attributes:
             name:
-              taken: "同じ名前が登録されています"
+              taken: "同じ名前が登録されています。"
             email:
-              taken: "メールアドレスはすでに存在します"
+              taken: "メールアドレスはすでに存在します。"
             password:
-              too_short: "パスワードは%{count}文字以上で入力してください"
+              too_short: "パスワードは%{count}文字以上で入力してください。"

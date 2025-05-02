@@ -156,3 +156,42 @@
     display: none;
   }
 }
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .chat-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .chat-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .chat-name {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .unread-badge {
+    font-size: 12px;
+    color: red;
+  }
+
+  .chat-preview {
+    font-size: 12px;
+    color: #888;
+    margin-left: auto;
+  }
+}

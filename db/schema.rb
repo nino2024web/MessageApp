@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_10_085204) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_25_051154) do
   create_table "blocks", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "blocked_user_id", null: false
@@ -58,6 +58,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_10_085204) do
     t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
+  create_table "message_reads", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_message_reads_on_message_id"
+    t.index ["user_id"], name: "index_message_reads_on_user_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.text "content"
     t.integer "user_id", null: false
@@ -94,6 +103,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_10_085204) do
   add_foreign_key "friend_requests", "users", column: "sender_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
+  add_foreign_key "message_reads", "messages"
+  add_foreign_key "message_reads", "users"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
 end

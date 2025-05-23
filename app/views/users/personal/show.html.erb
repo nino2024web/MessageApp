@@ -8,10 +8,8 @@
 <%= turbo_stream_from "search_results_#{current_user.id}" %>
 <!-- 左部friend詳細  中央メインチャット -->
 <div class="main-container">
-  <%= render "layouts/leftSide/left_side" %>
+  <%= render "layouts/leftSide/left_side_personal" %>
   <% if @chat.present? %>
     <%= render "layouts/center/center" %>
-  <% else %>
-    <p class="center-placeholder">チャットを選択してください</p>
   <% end %>
 </div>

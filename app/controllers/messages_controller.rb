@@ -38,7 +38,7 @@ class MessagesController < ApplicationController
   def render_failed_turbo_stream
     render turbo_stream: turbo_stream.replace(
       'chat-input',
-      partial: 'layouts/center/chat_input',
+      partial: 'layouts/center/personal_chat/chat_input',
       locals: { chat: @chat, message: @message }
     )
   end

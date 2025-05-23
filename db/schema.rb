@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_25_051154) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_19_133135) do
   create_table "blocks", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "blocked_user_id", null: false
@@ -19,6 +19,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_25_051154) do
     t.index ["blocked_user_id"], name: "index_blocks_on_blocked_user_id"
     t.index ["user_id", "blocked_user_id"], name: "index_blocks_on_user_id_and_blocked_user_id", unique: true
     t.index ["user_id"], name: "index_blocks_on_user_id"
+  end
+
+  create_table "chat_room_users", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "chat_room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_room_id"], name: "index_chat_room_users_on_chat_room_id"
+    t.index ["user_id"], name: "index_chat_room_users_on_user_id"
+  end
+
+  create_table "chat_rooms", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "creator_id"
   end
 
   create_table "chat_users", force: :cascade do |t|
@@ -56,6 +72,26 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_25_051154) do
     t.datetime "updated_at", null: false
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
     t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
+  create_table "group_message_reads", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "group_message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_message_id"], name: "index_group_message_reads_on_group_message_id"
+    t.index ["user_id", "group_message_id"], name: "index_group_message_reads_on_user_id_and_group_message_id", unique: true
+    t.index ["user_id"], name: "index_group_message_reads_on_user_id"
+  end
+
+  create_table "group_messages", force: :cascade do |t|
+    t.text "content"
+    t.integer "user_id", null: false
+    t.integer "chat_room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_room_id"], name: "index_group_messages_on_chat_room_id"
+    t.index ["user_id"], name: "index_group_messages_on_user_id"
   end
 
   create_table "message_reads", force: :cascade do |t|
@@ -97,12 +133,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_25_051154) do
 
   add_foreign_key "blocks", "users"
   add_foreign_key "blocks", "users", column: "blocked_user_id"
+  add_foreign_key "chat_room_users", "chat_rooms"
+  add_foreign_key "chat_room_users", "users"
   add_foreign_key "chat_users", "chats"
   add_foreign_key "chat_users", "users"
   add_foreign_key "friend_requests", "users", column: "receiver_id"
   add_foreign_key "friend_requests", "users", column: "sender_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
+  add_foreign_key "group_message_reads", "group_messages"
+  add_foreign_key "group_message_reads", "users"
+  add_foreign_key "group_messages", "chat_rooms"
+  add_foreign_key "group_messages", "users"
   add_foreign_key "message_reads", "messages"
   add_foreign_key "message_reads", "users"
   add_foreign_key "messages", "chats"

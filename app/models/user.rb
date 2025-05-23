@@ -26,6 +26,12 @@ class User < ApplicationRecord
   has_many :reverse_blocks, class_name: 'Block', foreign_key: :blocked_user_id
   has_many :blockers, through: :reverse_blocks, source: :user
 
+  # グループチャット
+  has_many :chat_room_users, dependent: :destroy
+  has_many :chat_rooms, through: :chat_room_users
+  has_many :group_messages, dependent: :destroy
+  has_many :group_message_read, dependent: :destroy
+
   # 部分一致名前検索
   scope :search_by_name, ->(name) { where('name LIKE ?', "%#{name}%") }
 

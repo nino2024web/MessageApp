@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "group-invite-wrapper" do %>
+  <%= render "layouts/leftSide/group_chat/group_invite_form",
+    chat_room: @chat_room,
+    invite_candidates: @invite_candidates,
+    sorted_members: @sorted_members %>
+<% end %>

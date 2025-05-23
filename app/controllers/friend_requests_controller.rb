@@ -15,7 +15,7 @@ class FriendRequestsController < ApplicationController
     if friend_request.save
       render turbo_stream: turbo_stream.replace(
         "friend-request-btn-#{receiver.id}",
-        partial: 'layouts/leftSide/request_button',
+        partial: 'layouts/leftSide/personal_chat/request_button',
         locals: { user: receiver }
       )
     else
@@ -39,20 +39,20 @@ class FriendRequestsController < ApplicationController
           if current_user.friends.count == 1
             render turbo_stream: turbo_stream.replace(
               'friend-list',
-              partial: 'layouts/leftSide/friend_list',
+              partial: 'layouts/leftSide/personal_chat/friend_list',
               locals: { all_friends: current_user.friends }
             )
           else
             render turbo_stream: turbo_stream.append(
               'friend-list',
-              partial: 'layouts/leftSide/friend_item',
+              partial: 'layouts/leftSide/personal_chat/friend_item',
               locals: { friend: @friend_request.sender }
             )
           end
         else
           render turbo_stream: turbo_stream.replace(
             'friend-requests',
-            partial: 'layouts/leftSide/friend_requests',
+            partial: 'layouts/leftSide/personal_chat/friend_requests',
             locals: { friend_requests: current_user.received_friend_requests.pending }
           )
         end

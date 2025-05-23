@@ -11,7 +11,7 @@ class Friendship < ApplicationRecord
     Turbo::StreamsChannel.broadcast_replace_to(
       "friend_list_#{user.id}",
       target: 'friend-list',
-      partial: 'layouts/leftSide/friend_list',
+      partial: 'layouts/leftSide/personal_chat/friend_list',
       locals: { all_friends: user.friends }
     )
   end

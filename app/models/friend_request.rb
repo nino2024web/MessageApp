@@ -12,7 +12,7 @@ class FriendRequest < ApplicationRecord
     broadcast_replace_to(
       "friend_requests_#{receiver.id}",
       target: 'friend-requests',
-      partial: 'layouts/leftSide/friend_requests',
+      partial: 'layouts/leftSide/personal_chat/friend_requests',
       locals: { friend_requests: receiver.received_friend_requests.pending }
     )
   end
@@ -23,7 +23,7 @@ class FriendRequest < ApplicationRecord
         broadcast_replace_to(
           "friend_list_#{user.id}",
           target: 'friend-list',
-          partial: 'layouts/leftSide/friend_list',
+          partial: 'layouts/leftSide/personal_chat/friend_list',
           locals: { all_friends: user.friends }
         )
       end
@@ -36,7 +36,7 @@ class FriendRequest < ApplicationRecord
     Turbo::StreamsChannel.broadcast_replace_to(
       "friend_requests_#{receiver.id}",
       target: 'friend-requests',
-      partial: 'layouts/leftSide/friend_requests',
+      partial: 'layouts/leftSide/personal_chat/friend_requests',
       locals: {
         friend_requests: receiver.received_friend_requests.where(status: 'pending')
       }

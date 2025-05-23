@@ -8,6 +8,10 @@
     <div class="chat-title">
       <%= @chat.other_user(current_user).name %>さんとチャットしています。
     </div>
+  <% elsif @chat_room.present? %>
+    <div class="chat-title">
+      <%= @chat_room.name %>グループでチャットしています。
+    </div>
   <% end %>
   <div class="logout-button">
     <%= link_to "ログアウト", destroy_user_session_path,

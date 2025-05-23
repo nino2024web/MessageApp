@@ -1,0 +1,21 @@
+<turbo_stream action="append" target="group-messages">
+  <template>
+    <%= render partial: "layouts/center/group_chat/group_message", formats: [:html], locals: { message: @group_message, current_user: current_user } %>
+  </template>
+</turbo_stream>
+<turbo_stream action="replace" target="chat-input">
+  <template>
+    <%= render partial: "layouts/center/group_chat/group_input", formats: [:html], locals: { chat_room: @chat_room, group_message: GroupMessage.new } %>
+  </template>
+</turbo_stream>
+<turbo-stream action="replace" target="group-chat-list">
+  <template>
+    <ul class="group-chat-list" id="group-chat-list">
+      <% @ordered_rooms.each do |chat_room| %>
+        <% if chat_room.id == @chat_room&.id %>
+          <%= render partial: "layouts/leftSide/group_chat/group_chat_item", locals: { chat_room: chat_room, current_user: current_user } %>
+        <% end %>
+      <% end %>
+    </ul>
+  </template>
+</turbo-stream>

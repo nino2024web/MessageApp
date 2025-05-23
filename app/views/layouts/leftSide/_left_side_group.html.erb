@@ -1,0 +1,13 @@
+<div class="left-side">
+  <div class="chat-toggle-buttons">
+    <%= button_to "個人チャット", personal_user_path(current_user), method: :get, class: "chat-toggle-btn" %>
+    <%= button_to "グループチャット", group_user_path(current_user), method: :get, class: "chat-toggle-btn" %>
+  </div>
+  <h3><%= current_user.name %>さんが参加している</br>グループチャット</h3>
+  <%= render "layouts/leftSide/group_chat/group_chat_list", chat_rooms: @chat_rooms %>
+  <h3>グループに友達を招待</h3>
+  <%= render "layouts/leftSide/group_chat/group_invite_form", chat_room: @chat_room, friends: @all_friends %>
+  <h3>新しいグループチャットを作成</h3>
+  <p>※作成できるグループ名は10文字以内です</p>
+  <%= render "layouts/leftSide/group_chat/group_create_form", chat_room: ChatRoom.new %>
+</div>

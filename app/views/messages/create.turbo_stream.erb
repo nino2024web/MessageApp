@@ -1,10 +1,10 @@
 <turbo-stream action="replace" target="chat-messages">
   <template>
-    <%= render partial: "layouts/center/chat_messages", formats: :html, locals: { messages: @chat.messages.includes(:user), current_user: current_user } %>
+    <%= render partial: "layouts/center/personal_chat/chat_messages", formats: :html, locals: { messages: @chat.messages.includes(:user), current_user: current_user } %>
   </template>
 </turbo-stream>
 <turbo-stream action="replace" target="chat-input">
   <template>
-    <%= render partial: "layouts/center/chat_input", formats: :html, locals: { chat: @chat, message: @message } %>
+    <%= render partial: "layouts/center/personal_chat/chat_input", formats: :html, locals: { chat: @chat, message: @message } %>
   </template>
 </turbo-stream>

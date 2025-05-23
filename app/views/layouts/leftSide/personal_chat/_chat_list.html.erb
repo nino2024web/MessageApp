@@ -4,8 +4,8 @@
     <% if all_chats.any? %>
       <ul class="chat-history">
         <% all_chats.uniq { |chat| chat.other_user(current_user).id }.each_with_index do |chat, index| %>
-          <li class="chat-item <%= 'hidden' if index >= 4 %>">
-            <%= link_to user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
+          <li class="chat-item <%= 'hidden' if index >= 5 %>">
+            <%= link_to personal_user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
               <span class="chat-left">
                 <span class="chat-name">
                   <%= chat.other_user(current_user).name %>

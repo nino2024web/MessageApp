@@ -1,9 +1,8 @@
 .left-side {
   position: fixed;
-  top: 60px;
+  top: 30px;
   left: 0;
   width: 260px;
-  height: calc(100vh - 60px);
   background-color: #f9f9f9;
   padding: 15px;
   border-right: 1px solid #ddd;
@@ -20,7 +19,7 @@
   .chat-list-container,
   .friend-list-container,
   .friend-requests-container {
-    max-height: 200px;
+    max-height: 180px;
     overflow-y: auto;
     margin-top: 10px;
   }
@@ -193,5 +192,44 @@
     font-size: 12px;
     color: #888;
     margin-left: auto;
+  }
+}
+
+.chat-toggle-buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  button {
+    padding: 4px 8px;
+    border: 1px solid #999;
+    background-color: #eb6100;
+    border-radius: 4px;
+    cursor: pointer;
+    border-radius: 100vh;
+
+    &:hover {
+      background: #f56500;
+    }
+  }
+}
+
+.search-results {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-left: 0;
+  margin-top: 10px;
+
+  .search-item {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .user-name {
+      font-weight: bold;
+    }
   }
 }

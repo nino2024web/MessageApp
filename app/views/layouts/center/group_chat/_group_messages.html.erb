@@ -1,0 +1,12 @@
+<div id="group-messages" class="chat-messages">
+  <% group_messages.each do |message| %>
+    <div class="message <%= message.user_id == current_user.id ? 'own-message' : 'other-message' %>">
+      <% unless message.user_id == current_user.id %>
+        <p class="sender-name"><%= message.user.name %></p>
+      <% end %>
+      <p class="content"><%= message.content %></p>
+      <p class="timestamp"><%= message.created_at.strftime("%Y/%m/%d %H:%M") %></p>
+    </div>
+  <% end %>
+  <div id="scroll-anchor" data-controller="scroll"></div>
+</div>

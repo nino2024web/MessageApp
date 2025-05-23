@@ -1,0 +1,14 @@
+<li class="chat-item <%= 'active-room' if chat_room.id == @chat_room&.id %>">
+  <%= link_to group_user_path(current_user, chat_room_id: chat_room.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
+    <div class="chat-name">
+      <%= chat_room.name %>（<%= chat_room.users.count %>人）
+      <% unread_count = chat_room.unread_count_for(current_user) %>
+      <% if unread_count > 0 %>
+        <span class="unread-badge">未読数🔴<%= unread_count %></span>
+      <% end %>
+    </div>
+    <div class="chat-preview">
+      <%= truncate(chat_room.group_messages.last&.content, length: 5) %>
+    </div>
+  <% end %>
+</li>

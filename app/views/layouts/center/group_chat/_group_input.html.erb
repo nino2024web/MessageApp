@@ -1,0 +1,7 @@
+<div class="chat-input-container group" id="chat-input">
+  <%= form_with model: group_message, url: group_messages_path, data: { turbo_stream: true }, local: false, data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" } do |f| %>
+    <%= f.text_area :content, rows: 2, class: 'chat-textarea', placeholder: "メッセージを入力してください" %>
+    <%= f.hidden_field :chat_room_id, value: chat_room.id %>
+    <%= f.submit "送信", class: 'chat-submit-btn' %>
+  <% end %>
+</div>

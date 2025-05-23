@@ -57,7 +57,7 @@ class FriendRequestsController < ApplicationController
           )
         end
       end
-      format.html { redirect_to request.referrer || user_path(current_user) }
+      format.html { redirect_to request.referrer || personal_user_path(current_user) }
     end
   end
 

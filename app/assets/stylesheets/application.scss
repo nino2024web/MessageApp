@@ -1,7 +1,8 @@
-@import "auth";
-@import "header";
-@import "left_side";
-@import "center";
+@import "layouts/header";
+@import "layouts/auth";
+@import "layouts/left_side_personal";
+@import "layouts/left_side_group";
+@import "layouts/center";
 
 body {
   background-color: #f4f4f4;

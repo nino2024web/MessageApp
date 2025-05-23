@@ -1,0 +1,19 @@
+<div class="group-create-form" id="group-create-form">
+  <%= form_with model: chat_room, url: chat_rooms_path, data: { turbo: true }, local: false do |f| %>
+    <% if defined?(success_message) && success_message.present? %>
+      <p class="form-success"><%= success_message %></p>
+    <% elsif chat_room.errors.any? %>
+      <ul class="form-errors">
+        <% if chat_room.errors.details[:name].any? { |e| e[:error] == :taken } %>
+          <li>既に同じグループ名で作成されています</li>
+        <% elsif chat_room.errors.details[:name].any? { |e| e[:error] == :blank } %>
+          <li>グループ名を入力してください</li>
+        <% else %>
+          <li>グループ名は10文字以内で入力してください</li>
+        <% end %>
+      </ul>
+    <% end %>
+    <%= f.text_area :name, rows: 1, class: "group-textarea", placeholder: "グループ名を入力" %>
+    <%= f.submit "作成", class: "group-create-btn" %>
+  <% end %>
+</div>

@@ -1,0 +1,64 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.chat-item {
+  padding: 8px 12px;
+  font-size: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+
+  &.active-room {
+    background-color: #f0f8ff;
+    font-weight: bold;
+  }
+}
+
+// チャット名・未読表示
+.chat-name {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.unread-badge {
+  color: red;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.chat-preview {
+  color: #555;
+  font-size: 11px;
+}
+
+// グループチャットリスト（最大5件表示、スクロール対応）
+.group-chat-list {
+  max-height: 200px; // 40px × 5件
+  overflow-y: auto;
+
+  li.chat-item {
+    font-size: 13px;
+  }
+}
+
+// メンバーリスト（招待済み）
+.member-scroll {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-left: 10px;
+
+  li {
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+.left-side {
+  box-sizing: border-box;
+  height: calc(100vh - 30px);
+  overflow-y: auto;
+  padding-bottom: 60px;
+}

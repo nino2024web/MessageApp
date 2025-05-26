@@ -5,6 +5,9 @@ class GroupMessage < ApplicationRecord
 
   validates :content, presence: true
 
+  # 投稿文字数最大800文字
+  validates :content, presence: true, length: { maximum: 800 }
+
   after_create_commit do
     broadcast_append_to(
       "group_chat_#{chat_room_id}",

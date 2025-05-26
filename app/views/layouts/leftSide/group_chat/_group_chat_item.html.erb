@@ -1,4 +1,4 @@
-<li class="chat-item <%= 'active-room' if chat_room.id == @chat_room&.id %>">
+<li id="group-chat-item-<%= chat_room.id %>" class="chat-item <%= 'active-room' if chat_room.id == @chat_room&.id %>">
   <%= link_to group_user_path(current_user, chat_room_id: chat_room.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
     <div class="chat-name">
       <%= chat_room.name %>（<%= chat_room.users.count %>人）

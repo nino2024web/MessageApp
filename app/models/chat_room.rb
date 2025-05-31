@@ -9,18 +9,13 @@ class ChatRoom < ApplicationRecord
     users.first
   end
 
+  # 全メッセージを「既読」にマーク（自分以外が投稿した分）
   def mark_messages_as_read_for(user)
-    group_messages.each do |message|
-      GroupMessageRead.find_or_create_by(user: user, group_message: message)
-    end
+    group_messages.where.not(user_id: user.id).where(read: [false, nil]).update_all(read: true)
   end
 
+  # 自分以外の「未読」メッセージの数
   def unread_count_for(user)
-    group_messages
-      .left_outer_joins(:group_message_reads)
-      .where(group_message_reads: { id: nil })
-      .where.not(user_id: user.id)
-      .distinct
-      .count
+    group_messages.where.not(user_id: user.id).where(read: [false, nil]).count
   end
 end

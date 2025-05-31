@@ -16,8 +16,6 @@ class User < ApplicationRecord
   has_many :sent_friend_requests, class_name: 'FriendRequest', foreign_key: 'sender_id', dependent: :destroy
   has_many :received_friend_requests, class_name: 'FriendRequest', foreign_key: 'receiver_id', dependent: :destroy
 
-  has_many :message_reads, dependent: :destroy
-
   # blockしたユーザー
   has_many :blocks
   has_many :blocked_users, through: :blocks, source: :blocked_user
@@ -46,5 +44,9 @@ class User < ApplicationRecord
     Chat.find_or_create_by(user1_id: id, user2_id: friend.id) do |c|
       c.name = "#{name}_#{friend.name}"
     end
+  end
+
+  def chats
+    Chat.where(user1_id: id).or(Chat.where(user2_id: id))
   end
 end

@@ -1,6 +1,4 @@
 class Chat < ApplicationRecord
-  has_many :chat_users
-  has_many :users, through: :chat_users
   has_many :messages, dependent: :destroy
 
   belongs_to :user1, class_name: 'User'
@@ -22,10 +20,6 @@ class Chat < ApplicationRecord
   end
 
   def unread_count_for(user)
-    messages
-      .where.not(user_id: user.id)
-      .left_joins(:message_reads)
-      .where(message_reads: { user_id: nil })
-      .count
+    messages.where.not(user_id: user.id).where(read: [false, nil]).count
   end
 end

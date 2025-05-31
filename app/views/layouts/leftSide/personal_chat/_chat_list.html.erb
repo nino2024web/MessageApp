@@ -9,10 +9,12 @@
               <span class="chat-left">
                 <span class="chat-name">
                   <%= chat.other_user(current_user).name %>
-                  <% unread_count = chat.unread_count_for(current_user) %>
-                  <% if unread_count > 0 %>
-                    <span class="unread-badge">未読数🔴<%= unread_count %></span>
-                  <% end %>
+                  <span id="unread-count-personal-<%= chat.id %>">
+                    <% unread_count = chat.unread_count_for(current_user) %>
+                    <% if unread_count > 0 %>
+                      <span class="unread-badge">未読数🔴<%= unread_count %></span>
+                    <% end %>
+                  </span>
                 </span>
               </span>
               <span class="chat-preview"><%= truncate(chat.messages.last&.content, length: 5) %></span>

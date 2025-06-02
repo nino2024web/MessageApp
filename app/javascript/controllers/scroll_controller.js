@@ -1,17 +1,16 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  // connect() {
-  //   this.element.scrollIntoView({ behavior: "smooth" });
-  // }
+  static targets = ["messages"]
 
   connect() {
-    this.scrollIntoView();
+    this.scrollToBottom()
+    document.addEventListener("turbo:after-stream", () => this.scrollToBottom())
   }
 
-  scrollIntoView() {
-    setTimeout(() => {
-      this.element.scrollIntoView({ behavior: "smooth" })
-    }, 10)
+  scrollToBottom() {
+    if (this.hasMessagesTarget) {
+      this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight
+    }
   }
 }

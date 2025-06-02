@@ -1,0 +1,4 @@
+<% unread_count = chat_room.unread_count_for(current_user) %>
+<% if unread_count > 0 %>
+  <span class="unread-badge">未読数🔴<%= unread_count %></span>
+<% end %>

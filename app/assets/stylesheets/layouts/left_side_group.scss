@@ -34,9 +34,9 @@ ul {
   font-size: 11px;
 }
 
-// グループチャットリスト（最大5件表示、スクロール対応）
+// グループチャットリスト（最大3件表示、スクロール対応）
 .group-chat-list {
-  max-height: 200px; // 40px × 5件
+  max-height: 120px; // 40px × 3件
   overflow-y: auto;
 
   li.chat-item {

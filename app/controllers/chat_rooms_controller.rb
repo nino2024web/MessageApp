@@ -29,6 +29,15 @@ class ChatRoomsController < ApplicationController
         ([creator] + others).compact.first(10)
       end
 
+      @chat_room.users.each do |user|
+        Turbo::StreamsChannel.broadcast_replace_to(
+          user,
+          target: "group-chat-item-#{@chat_room.id}",
+          partial: 'layouts/leftSide/group_chat/group_chat_item',
+          locals: { chat_room: @chat_room, current_user: user }
+        )
+      end
+
       respond_to do |format|
         format.turbo_stream
         format.html do
@@ -65,7 +74,7 @@ class ChatRoomsController < ApplicationController
   def append_chat_list
     # 成功時リスト追加
     turbo_stream.append(
-      'group-chat-list',
+      'my-created-group-chat-list',
       partial: 'layouts/leftSide/group_chat/group_chat_item',
       locals: { chat_room: @chat_room }
     )

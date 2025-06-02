@@ -3,6 +3,7 @@ class CreateGroupMessageReads < ActiveRecord::Migration[7.1]
     create_table :group_message_reads do |t|
       t.references :user, null: false, foreign_key: true
       t.references :group_message, null: false, foreign_key: true
+      t.references :chat_room, null: false, foreign_key: true
 
       t.timestamps
     end

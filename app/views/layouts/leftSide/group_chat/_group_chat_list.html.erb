@@ -1,20 +1,32 @@
 <div class="group-chat-section">
   <p class="section-title">現在参加中のグループチャット</p>
-  <ul class="group-chat-list" id="group-chat-list">
+  <ul class="group-chat-list" id="current-group-chat-list">
     <% @ordered_rooms.each do |chat_room| %>
       <% if chat_room.id == @chat_room&.id %>
-        <%= render partial: "layouts/leftSide/group_chat/group_chat_item", locals: { chat_room: chat_room, current_user: current_user } %>
+        <%= render partial: "layouts/leftSide/group_chat/group_chat_item",
+                   locals: { chat_room: chat_room, current_user: current_user } %>
       <% end %>
     <% end %>
-    
   </ul>
 </div>
 <div class="group-chat-section">
-  <p class="section-title">その他のグループチャット</p>
-  <ul class="group-chat-list">
+  <p class="section-title">自分が作成したグループチャット</p>
+  <ul class="group-chat-list" id="my-created-group-chat-list">
     <% @ordered_rooms.each do |chat_room| %>
-      <% unless chat_room.id == @chat_room&.id %>
-        <%= render partial: "layouts/leftSide/group_chat/group_chat_item", locals: { chat_room: chat_room, current_user: current_user } %>
+      <% if chat_room.creator_id == current_user.id && chat_room.id != @chat_room&.id %>
+        <%= render partial: "layouts/leftSide/group_chat/group_chat_item",
+                   locals: { chat_room: chat_room, current_user: current_user } %>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
+<div class="group-chat-section">
+  <p class="section-title">自分が参加しているグループチャット</p>
+  <ul class="group-chat-list" id="other-group-chat-list">
+    <% @ordered_rooms.each do |chat_room| %>
+      <% unless chat_room.id == @chat_room&.id || chat_room.creator_id == current_user.id %>
+        <%= render partial: "layouts/leftSide/group_chat/group_chat_item",
+                   locals: { chat_room: chat_room, current_user: current_user } %>
       <% end %>
     <% end %>
   </ul>

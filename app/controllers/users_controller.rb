@@ -44,9 +44,6 @@ class UsersController < ApplicationController
     chat = Chat.between(current_user, friend)
     return chat if chat
 
-    chat = Chat.create(user1: current_user, user2: friend, name: "#{current_user.name} & #{friend.name}")
-    ChatUser.create(chat: chat, user: current_user)
-    ChatUser.create(chat: chat, user: friend)
-    chat
+    Chat.create(user1: current_user, user2: friend, name: "#{current_user.name} & #{friend.name}")
   end
 end

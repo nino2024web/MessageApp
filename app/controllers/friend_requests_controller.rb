@@ -33,6 +33,24 @@ class FriendRequestsController < ApplicationController
     process_request(@friend_request)
     update_friend_requests
 
+    if params[:status] == 'accepted'
+      sender = @friend_request.sender
+      receiver = @friend_request.receiver
+
+      friend_list_html = ApplicationController.renderer.render(
+        partial: 'layouts/leftSide/personal_chat/friend_list',
+        locals: { all_friends: current_user.friends }
+      )
+
+      FriendsChannel.broadcast_to(
+        sender,
+        {
+          type: 'friend_list_update',
+          html: friend_list_html
+        }
+      )
+    end
+
     respond_to do |format|
       format.turbo_stream do
         if params[:status] == 'accepted'

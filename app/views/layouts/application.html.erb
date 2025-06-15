@@ -8,11 +8,7 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body>
-    <% if user_signed_in? %>
-      <%= yield %>
-    <% else %>
-      <%= yield %>
-    <% end %>
+  <body data-current-user-id="<%= current_user.id if user_signed_in? %>">
+    <%= yield %>
   </body>
 </html>

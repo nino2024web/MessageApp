@@ -9,3 +9,5 @@ pin "controllers" # @0.0.2
 pin "fs" # @2.1.0
 pin "path" # @2.1.0
 pin "process" # @2.1.0
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"

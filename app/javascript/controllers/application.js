@@ -1,5 +1,4 @@
 import { Application } from "@hotwired/stimulus"
-import { Turbo } from "@hotwired/turbo-rails"
 import "controllers"
 
 const application = Application.start()

@@ -13,70 +13,35 @@ class FriendRequestsController < ApplicationController
     friend_request = current_user.sent_friend_requests.build(receiver:)
 
     if friend_request.save
-      render turbo_stream: turbo_stream.replace(
-        "friend-request-btn-#{receiver.id}",
+
+      html_for_sender = render_to_string(
         partial: 'layouts/leftSide/personal_chat/request_button',
-        locals: { user: receiver }
+        locals: { user: receiver, current_user: current_user }
       )
+
+      html_for_receiver = render_to_string(
+        partial: 'layouts/leftSide/personal_chat/request_button',
+        locals: { user: current_user, current_user: receiver }
+      )
+
+      FriendsChannel.broadcast_to("friend_request_btn_#{receiver.id}", html_for_sender)
+      FriendsChannel.broadcast_to("friend_request_btn_#{current_user.id}", html_for_receiver)
+      head :ok
     else
       render json: { error: '友達申請に失敗しました' }, status: :unprocessable_entity
     end
-
-    @friend_requests = current_user.received_friend_requests
-                                   .pending
-                                   .includes(:sender)
-                                   .where.not(sender: current_user.blocked_users + current_user.blockers)
   end
 
   def update
     @friend_request = FriendRequest.find(params[:id])
     process_request(@friend_request)
-    update_friend_requests
 
     if params[:status] == 'accepted'
-      sender = @friend_request.sender
-      receiver = @friend_request.receiver
-
-      friend_list_html = ApplicationController.renderer.render(
-        partial: 'layouts/leftSide/personal_chat/friend_list',
-        locals: { all_friends: current_user.friends }
-      )
-
-      FriendsChannel.broadcast_to(
-        sender,
-        {
-          type: 'friend_list_update',
-          html: friend_list_html
-        }
-      )
+      broadcast_friend_list(@friend_request.sender)
+      broadcast_friend_list(@friend_request.receiver)
     end
-
-    respond_to do |format|
-      format.turbo_stream do
-        if params[:status] == 'accepted'
-          if current_user.friends.count == 1
-            render turbo_stream: turbo_stream.replace(
-              'friend-list',
-              partial: 'layouts/leftSide/personal_chat/friend_list',
-              locals: { all_friends: current_user.friends }
-            )
-          else
-            render turbo_stream: turbo_stream.append(
-              'friend-list',
-              partial: 'layouts/leftSide/personal_chat/friend_item',
-              locals: { friend: @friend_request.sender }
-            )
-          end
-        else
-          render turbo_stream: turbo_stream.replace(
-            'friend-requests',
-            partial: 'layouts/leftSide/personal_chat/friend_requests',
-            locals: { friend_requests: current_user.received_friend_requests.pending }
-          )
-        end
-      end
-      format.html { redirect_to request.referrer || personal_user_path(current_user) }
-    end
+    broadcast_friend_requests(@friend_request.receiver)
+    head :ok
   end
 
   private
@@ -84,15 +49,11 @@ class FriendRequestsController < ApplicationController
   def process_request(request)
     case params[:status]
     when 'accepted'
-      accept_request(request)
+      request.update(status: 'accepted')
+      create_friendship(request)
     when 'rejected'
       request.update(status: 'rejected')
     end
-  end
-
-  def accept_request(request)
-    request.update(status: 'accepted')
-    create_friendship(request)
   end
 
   def create_friendship(request)
@@ -100,10 +61,22 @@ class FriendRequestsController < ApplicationController
     Friendship.create(user: request.receiver, friend: request.sender)
   end
 
-  def update_friend_requests
-    @friend_requests = current_user.received_friend_requests
-                                   .pending
-                                   .includes(:sender)
-                                   .where.not(sender: current_user.blocked_users + current_user.blockers)
+  def broadcast_friend_list(user)
+    html = render_to_string(
+      partial: 'layouts/leftSide/personal_chat/friend_list',
+      locals: { all_friends: user.friends }
+    )
+    ActionCable.server.broadcast("friend_list_#{user.id}", html)
+  end
+
+  def broadcast_friend_requests(user)
+    html = render_to_string(
+      partial: 'layouts/leftSide/personal_chat/friend_requests',
+      locals: {
+        friend_requests: user.received_friend_requests.pending
+                             .where.not(sender_id: user.blocked_users.ids + user.blockers.ids)
+      }
+    )
+    ActionCable.server.broadcast("friend_requests_#{user.id}", html)
   end
 end

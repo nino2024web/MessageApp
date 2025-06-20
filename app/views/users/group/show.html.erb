@@ -1,9 +1,6 @@
   <!-- ログイン後のheader上部 -->
 <%= render "layouts/header/header" %>
-<!-- リアルタイム反映 -->
-<%= turbo_stream_from "chat_room_#{@chat_room.id}" if @chat_room.present? %>
-<%= turbo_stream_from "chat_list_#{current_user.id}" %>
-<%= turbo_stream_from "group_chat_#{@chat_room.id}" if @chat_room.present? %>
+
 <!-- 左部friend詳細  中央メインチャット -->
 <div class="main-container">
   <%= render "layouts/leftSide/left_side_group" %>

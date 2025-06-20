@@ -2,8 +2,17 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def search
+    logger.debug '💥 UsersController#search 到達'
     @search_results = params[:name].present? ? perform_search : []
-    handle_search_response
+
+    html = render_to_string(
+      partial: 'layouts/leftSide/personal_chat/search_results',
+      formats: [:html],
+      locals: { search_results: @search_results }
+    )
+
+    ActionCable.server.broadcast("friend_search_#{current_user.id}", html)
+    head :ok
   end
 
   def start_chat
@@ -13,21 +22,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def handle_search_response
-    respond_to do |format|
-      format.turbo_stream { render_turbo_stream }
-      format.html { render_html }
-    end
-  end
-
-  def render_turbo_stream
-    render turbo_stream: turbo_stream.replace(
-      'search-results',
-      partial: 'layouts/leftSide/personal_chat/search_results',
-      locals: { search_results: @search_results }
-    )
-  end
 
   def render_html
     render partial: 'layouts/leftSide/personal_chat/search_results',

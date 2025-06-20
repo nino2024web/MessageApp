@@ -14,9 +14,8 @@
     </div>
   <% end %>
   <div class="logout-button">
-    <%= link_to "ログアウト", destroy_user_session_path,
+    <%= button_to "ログアウト", destroy_user_session_path,
             method: :delete,
-            data: { turbo_method: :delete, turbo_frame: "_top" },
             class: "logout-link" %>
   </div>
 </header>

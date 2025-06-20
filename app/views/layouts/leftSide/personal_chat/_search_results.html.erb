@@ -1,5 +1,5 @@
-  <!-- 検索結果 -->
-<turbo-frame id="search-results">
+<!-- 検索結果 -->
+<div id="search-results">
   <% if params[:name].present? %>
     <% if search_results.any? %>
       <ul class="search-results">
@@ -9,16 +9,16 @@
             <% if current_user.friends.include?(user) %>
               <%= button_to "チャット開始", start_chat_user_path(user), method: :post, data: { turbo: false } %>
             <% end %>
-            <turbo-frame id="friend-request-btn-<%= user.id %>">
+            <div id="friend-request-btn-<%= user.id %>" data-controller="friend-requests" data-friend-requests-user-id-value="<%= user.id %>">
               <%= render "layouts/leftSide/personal_chat/request_button", user: user %>
-            </turbo-frame>
+            </div>
           </li>
         <% end %>
       </ul>
     <% else %>
       <p class="no-chat-message">該当するユーザーが見つかりませんでした。</p>
     <% end %>
-  <% elsif params[:name] == "" %>
+  <% else %>
     <p class="no-chat-message">名前を入力してください。</p>
   <% end %>
-</turbo-frame>
+</div>

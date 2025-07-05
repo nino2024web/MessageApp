@@ -8,7 +8,17 @@
   <h3>友達リスト</h3>
   <%= render "layouts/leftSide/personal_chat/friend_list", all_friends: @all_friends %>
   <h3>友達リクエスト</h3>
-  <%= render "layouts/leftSide/personal_chat/friend_requests", friend_requests: @friend_requests %>
+  <div id="friend-requests"
+       data-controller="friend-requests"
+       data-friend-requests-user-id-value="<%= current_user.id %>"
+       data-friend-requests-target="list">
+    <div data-friend-requests-target="list">
+      <%= render "layouts/leftSide/personal_chat/friend_requests",
+      friend_requests: @friend_requests,
+      users: @users,
+      current_user: current_user %>
+    </div>
+  </div>
   <h3>友達検索</h3>
   <%= render "layouts/leftSide/personal_chat/friend_search_form" %>
 </div>

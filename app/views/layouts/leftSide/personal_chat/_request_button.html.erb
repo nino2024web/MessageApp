@@ -1,19 +1,30 @@
-  <!-- buttonクリック後、リアルタイムにて切り替え -->
+<% puts "---- request_button partial START ----" %>
+<% puts "🔍 VIEW側：user.id = #{user.id} / current_user.id = #{current_user.id}" %>
+<% puts "🔍 received = #{current_user.received_friend_requests.where(sender_id: user.id).pluck(:status)}" %>
+<% puts "🔍 sent     = #{current_user.sent_friend_requests.where(receiver_id: user.id).pluck(:status)}" %>
+<% puts "---------------------------------------" %>
+<!-- buttonクリック後、リアルタイムにて切り替え -->
 <div id="friend-request-btn-<%= user.id %>"
-     data-controller="friend-request"
-     data-friend-request-user-id-value="<%= user.id %>">
+     data-controller="friend-request-buttons"
+     data-friend-request-buttons-user-id-value="<%= user.id %>"
+     data-friend-request-buttons-id-value="<%= friend_request&.id || '' %>"
+     data-friend-request-buttons-blocked-user-id-value="<%= user.id %>">
   <% if current_user.friends.include?(user) %>
     <span class="friend-status">友達</span>
   <% elsif current_user.sent_friend_requests.where(receiver_id: user.id, status: 'pending').exists? %>
     <span class="friend-status">申請中</span>
   <% elsif current_user.received_friend_requests.where(sender_id: user.id, status: 'pending').exists? %>
-    <span class="friend-status">承認待ち</span>
+    <span class="friend-status">承認中</span>
+  <% elsif current_user.sent_friend_requests.where(receiver_id: user.id, status: 'rejected').exists? %>
+    <button class="requests-btn"
+            data-action="click->friend-request-buttons#request">
+      友達再申請
+    </button>
+  <% elsif current_user.blocks.exists?(blocked_user_id: user.id) || current_user.blockers.exists?(user.id) %>
   <% else %>
-    <button
-      data-action="click->friend-request#request"
-      class="requests-btn">
+    <button class="requests-btn"
+            data-action="click->friend-request-buttons#request">
       友達申請
     </button>
   <% end %>
 </div>
-

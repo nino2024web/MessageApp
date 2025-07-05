@@ -13,6 +13,6 @@
     <%= f.submit "検索", class: "search-button", data: { action: "click->friend-search#search" } %>
   <% end %>
   <div id="search-results" data-friend-search-target="results">
-    <%= render "layouts/leftSide/personal_chat/search_results", search_results: @search_results %>
+    <%= render "layouts/leftSide/personal_chat/search_results", search_results: @search_results || [] %>
   </div>
 </div>

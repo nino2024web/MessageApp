@@ -6,11 +6,11 @@
         <% search_results.each do |user| %>
           <li class="search-item">
             <span class="user-name"><%= user.name %></span>
-            <% if current_user.friends.include?(user) %>
-              <%= button_to "チャット開始", start_chat_user_path(user), method: :post, data: { turbo: false } %>
-            <% end %>
-            <div id="friend-request-btn-<%= user.id %>" data-controller="friend-requests" data-friend-requests-user-id-value="<%= user.id %>">
-              <%= render "layouts/leftSide/personal_chat/request_button", user: user %>
+            <div id="friend-request-btn-<%= user.id %>" data-controller="friend-request" data-friend-requests-user-id-value="<%= user.id %>">
+              <%= render "layouts/leftSide/personal_chat/request_button",
+                  user: user,
+                  current_user: current_user,
+                  friend_request: current_user.sent_friend_requests.find_by(receiver_id: user.id) %>
             </div>
           </li>
         <% end %>

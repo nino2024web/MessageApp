@@ -8,7 +8,7 @@ export default class extends Controller {
     const currentUserId = document.body.dataset.currentUserId;
 
     this.subscription = consumer.subscriptions.create(
-      { channel: "FriendSearchChannel", user_id: currentUserId },
+      { channel: "SearchResultsChannel", id: currentUserId },
       {
         received: (html) => {
           this.resultsTarget.innerHTML = html;
@@ -25,16 +25,19 @@ export default class extends Controller {
 
   search(e) {
     e.preventDefault();
-
     const form = this.formTarget;
     const formData = new FormData(form);
+    const params = Object.fromEntries(formData.entries());
 
     fetch(form.action, {
-      method: form.method,
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
         "X-CSRF-Token": document.querySelector("[name=csrf-token]").content,
       },
-      body: formData,
+      credentials: "same-origin",
+      body: JSON.stringify(params),
     })
       .then((response) => {
         if (!response.ok) throw new Error("送信失敗");

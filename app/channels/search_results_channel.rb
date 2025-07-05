@@ -1,6 +1,6 @@
-class FriendSearchChannel < ApplicationCable::Channel
+class SearchResultsChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "friend_search_#{params[:id]}"
+    stream_from "search_results_#{params[:id]}"
   end
 
   def unsubscribed

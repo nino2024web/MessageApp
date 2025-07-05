@@ -1,15 +1,31 @@
-import consumer from "channels/consumer"
+import consumer from "channels/consumer";
 
-consumer.subscriptions.create("FriendSearchChannel", {
-  connected() {
-    // Called when the subscription is ready for use on the server
-  },
+const userId = document.body.dataset.currentUserId;
 
-  disconnected() {
-    // Called when the subscription has been terminated by the server
-  },
+if (userId) {
+  consumer.subscriptions.create(
+    { channel: "FriendSearchChannel", id: userId },
+    {
+      connected() {
+        console.log("FriendSearchChannel に接続");
+      },
 
-  received(data) {
-    // Called when there's incoming data on the websocket for this channel
-  }
-});
+      disconnected() {
+        console.log("FriendSearchChannel 切断");
+      },
+
+      received(data) {
+        console.log("📦 FriendSearchChannel 経由で受信", data);
+        const container = document.querySelector("#search-results");
+        if (container) {
+          container.innerHTML = data;
+          console.log("🔄 検索結果をリアルタイムで更新");
+        }
+      },
+    }
+  );
+} else {
+  console.warn(
+    "⚠️ userId が取得できませんでした。ログインしていない可能性があります。"
+  );
+}

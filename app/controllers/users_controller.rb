@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       locals: { search_results: @search_results }
     )
 
-    ActionCable.server.broadcast("friend_search_#{current_user.id}", html)
+    ActionCable.server.broadcast("search_results_#{current_user.id}", html)
     head :ok
   end
 
@@ -22,11 +22,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def render_html
-    render partial: 'layouts/leftSide/personal_chat/search_results',
-           locals: { search_results: @search_results }
-  end
 
   def perform_search
     blocked_ids = current_user.blocked_users.pluck(:id) + current_user.blockers.pluck(:id)

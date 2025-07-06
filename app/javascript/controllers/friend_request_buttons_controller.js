@@ -14,16 +14,8 @@ export default class extends Controller {
   reject() {
     this.sendRequest("rejected");
   }
-  connect() {
-    console.log("✅ Controller connected");
-    console.log("🧪 userIdValue:", this.userIdValue);
-    console.log("🧪 blockedUserIdValue:", this.blockedUserIdValue);
-  }
 
-  block() {
-    console.log("hoge")
-    console.log("🧪 blockedUserIdValue:", this.blockedUserIdValue);
-    
+  block(e) {
     fetch("/blocks", {
       method: "POST",
       headers: {
@@ -38,14 +30,13 @@ export default class extends Controller {
     })
       .then((response) => {
         if (!response.ok) throw new Error("ブロック失敗");
-        return response.text();
-      })
-      .then((html) => {
-        const container = document.querySelector("#search-results");
-        if (container) container.innerHTML = html;
+        const requestItem = this.element.closest(".request-item");
+        if (requestItem) requestItem.remove();
       })
       .catch((error) => {
-        console.error("ブロックエラー:", error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("ブロックエラー:", error);
+        }
       });
   }
 
@@ -64,7 +55,6 @@ export default class extends Controller {
     })
       .then((response) => {
         if (!response.ok) throw new Error("申請失敗");
-        console.log("✅ 申請リクエスト送信成功");
         return response.text();
       })
       .then((html) => {
@@ -73,11 +63,12 @@ export default class extends Controller {
         );
         if (target) {
           target.outerHTML = html;
-          console.log("DOM書き換え成功（送信者側）");
         }
       })
       .catch((error) => {
-        console.error("申請エラー:", error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("申請エラー:", error);
+        }
       });
   }
 
@@ -98,7 +89,7 @@ export default class extends Controller {
         if (status === "accepted") {
           this.element.innerHTML = html;
         } else if (status === "rejected") {
-          const item = this.element.closest("li");
+          const item = this.element.closest(".request-item");
           if (item) item.remove();
 
           const remaining = document.querySelectorAll(".request-item");
@@ -111,7 +102,9 @@ export default class extends Controller {
         }
       })
       .catch((error) => {
-        console.error("リクエストエラー:", error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("リクエストエラー:", error);
+        }
       });
   }
 }

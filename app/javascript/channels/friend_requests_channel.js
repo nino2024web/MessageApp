@@ -7,18 +7,21 @@ if (userId) {
     { channel: "FriendRequestsChannel", id: userId },
     {
       connected() {
-        console.log(`Subscribed to FriendRequestsChannel for user ${userId}`);
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            `Subscribed to FriendRequestsChannel for user ${userId}`
+          );
+        }
       },
-
       disconnected() {
-        console.log(
-          `Unsubscribed from FriendRequestsChannel for user ${userId}`
-        );
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            `Unsubscribed from FriendRequestsChannel for user ${userId}`
+          );
+        }
       },
 
       received(data) {
-        console.log("📦 received:", data);
-
         if (data.action === "reload_requests") {
           fetch("/friend_requests", {
             headers: { Accept: "text/html" },
@@ -28,9 +31,8 @@ if (userId) {
               const container = document.querySelector("#friend-requests");
               if (container) {
                 container.innerHTML = html;
-                console.log("友達リクエスト一覧再描画");
-              } else {
-                console.warn("⚠ #friend-requests が見つかりません");
+              } else if (process.env.NODE_ENV === "development") {
+                console.warn("#friend-requests が見つかりません");
               }
             });
 
@@ -42,9 +44,8 @@ if (userId) {
 
             if (target) {
               target.outerHTML = data.html;
-              console.log("request_button を承認中に更新");
-            } else {
-              console.warn("⚠ request_button の DOM が見つかりません");
+            } else if (process.env.NODE_ENV === "development") {
+              console.warn("request_button の DOM が見つかりません");
             }
           }
         }

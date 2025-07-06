@@ -1,17 +1,15 @@
 <!-- 検索結果 -->
 <div id="search-results">
-  <% if params[:name].present? %>
+  <% if defined?(search_results) && search_results.present? %>
     <% if search_results.any? %>
       <ul class="search-results">
         <% search_results.each do |user| %>
           <li class="search-item">
             <span class="user-name"><%= user.name %></span>
-            <div id="friend-request-btn-<%= user.id %>" data-controller="friend-request" data-friend-requests-user-id-value="<%= user.id %>">
-              <%= render "layouts/leftSide/personal_chat/request_button",
+            <%= render "layouts/leftSide/personal_chat/request_button",
                   user: user,
                   current_user: current_user,
                   friend_request: current_user.sent_friend_requests.find_by(receiver_id: user.id) %>
-            </div>
           </li>
         <% end %>
       </ul>

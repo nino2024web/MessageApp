@@ -1,7 +1,7 @@
 import consumer from "channels/consumer";
 
 export const subscribeToChat = (chatId, callback) => {
-  return consumer.subscriptions.create(
+  const subscription = consumer.subscriptions.create(
     { channel: "ChatChannel", chat_id: chatId },
     {
       connected() {
@@ -19,4 +19,5 @@ export const subscribeToChat = (chatId, callback) => {
       },
     }
   );
+  return subscription;
 };

@@ -1,13 +1,8 @@
-<% puts "---- request_button partial START ----" %>
-<% puts "🔍 VIEW側：user.id = #{user.id} / current_user.id = #{current_user.id}" %>
-<% puts "🔍 received = #{current_user.received_friend_requests.where(sender_id: user.id).pluck(:status)}" %>
-<% puts "🔍 sent     = #{current_user.sent_friend_requests.where(receiver_id: user.id).pluck(:status)}" %>
-<% puts "---------------------------------------" %>
 <!-- buttonクリック後、リアルタイムにて切り替え -->
 <div id="friend-request-btn-<%= user.id %>"
      data-controller="friend-request-buttons"
      data-friend-request-buttons-user-id-value="<%= user.id %>"
-     data-friend-request-buttons-id-value="<%= friend_request&.id || '' %>"
+     data-friend-request-buttons-id-value="<%= friend_request&.id || 'null' %>"
      data-friend-request-buttons-blocked-user-id-value="<%= user.id %>">
   <% if current_user.friends.include?(user) %>
     <span class="friend-status">友達</span>

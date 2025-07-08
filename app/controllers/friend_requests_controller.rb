@@ -64,8 +64,6 @@ class FriendRequestsController < ApplicationController
   end
 
   def update
-    logger.debug "🧪 params[:id]: #{params[:id]}"
-    logger.debug "🧪 params[:status]: #{params[:status]}"
     @friend_request = FriendRequest.find(params[:id])
     process_request(@friend_request)
 
@@ -73,7 +71,7 @@ class FriendRequestsController < ApplicationController
       broadcast_friend_list(@friend_request.sender)
       broadcast_friend_list(@friend_request.receiver)
 
-      html = render_to_string(
+      html_for_receiver = render_to_string(
         partial: 'layouts/leftSide/personal_chat/request_button',
         locals: {
           user: @friend_request.sender,
@@ -82,10 +80,34 @@ class FriendRequestsController < ApplicationController
         }
       )
 
-      render html: html.html_safe
+      html_for_sender = render_to_string(
+        partial: 'layouts/leftSide/personal_chat/request_button',
+        locals: {
+          user: @friend_request.receiver,
+          current_user: @friend_request.sender,
+          friend_request: @friend_request
+        }
+      )
+
+      ActionCable.server.broadcast(
+        "friend_requests_btn_#{@friend_request.sender.id}",
+        {
+          action: 'reload_requests',
+          userId: @friend_request.receiver.id,
+          html: html_for_sender
+        }
+      )
+
+      ActionCable.server.broadcast(
+        "friend_requests_btn_#{@friend_request.receiver.id}",
+        {
+          action: 'reload_requests',
+          userId: @friend_request.sender.id,
+          html: html_for_receiver
+        }
+      )
 
     elsif params[:status] == 'rejected'
-      logger.debug '🧪 Rejected分岐入りました'
       ActionCable.server.broadcast(
         "friend_requests_btn_#{@friend_request.sender.id}",
         { action: 'reload_requests' }
@@ -94,14 +116,11 @@ class FriendRequestsController < ApplicationController
       broadcast_search_results(@friend_request.receiver)
       broadcast_search_results(@friend_request.sender)
 
-      head :ok
-
     else
-      logger.debug '🧪 Else分岐入りました'
       # 拒否時 → リクエスト一覧のみ更新、ボタンは変更しない
       broadcast_friend_requests(@friend_request.receiver)
-      head :ok
     end
+    head :ok
   end
 
   private
@@ -126,6 +145,7 @@ class FriendRequestsController < ApplicationController
       partial: 'layouts/leftSide/personal_chat/friend_list',
       locals: { all_friends: user.friends }
     )
+    Rails.logger.debug "🔁 Broadcasting to friend_list_#{user.id}"
     ActionCable.server.broadcast("friend_list_#{user.id}", html)
   end
 

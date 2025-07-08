@@ -38,12 +38,8 @@ export default class extends Controller {
       },
       credentials: "same-origin",
       body: JSON.stringify(params),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("送信失敗");
-      })
-      .catch((error) => {
-        console.error("フォーム送信エラー::", error);
-      });
+    }).then((response) => {
+      if (!response.ok) throw new Error("送信失敗");
+    });
   }
 }

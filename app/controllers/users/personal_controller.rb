@@ -21,7 +21,9 @@ module Users
 
     def load_user_data
       @all_chats = @user.chats.order(updated_at: :desc)
-      @all_friends = @user.friends.order(:name)
+      @all_friends = @user.friends.to_a.sort_by do |friend|
+        friend.name.scan(/\d+/).first.to_i
+      end
       @friend_requests = @user.received_friend_requests.pending
       @search_results = []
     end

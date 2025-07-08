@@ -6,17 +6,13 @@ export default class extends Controller {
   static targets = ["list"];
 
   connect() {
-    console.log("友達一覧の購読を開始：", this.userIdValue);
-
     this.subscription = createConsumer().subscriptions.create(
       { channel: "FriendListChannel", id: this.userIdValue },
       {
         received: (html) => {
           if (this.hasListTarget) {
             this.listTarget.innerHTML = html;
-            console.log("友達一覧をリアルタイム更新");
-          } else {
-            console.warm("listTargetが見つかりません");
+            this.sortFriendList();
           }
         },
       }
@@ -26,7 +22,22 @@ export default class extends Controller {
   disconnect() {
     if (this.subscription) {
       this.subscription.unsubscribe();
-      console.log("友達一覧の購読を終了");
     }
+  }
+
+  sortFriendList() {
+    const items = Array.from(this.listTarget.querySelectorAll(".friend-item"));
+
+    items.sort((a, b) => {
+      const nameA = a.querySelector("span").textContent;
+      const nameB = b.querySelector("span").textContent;
+
+      const numA = parseInt(nameA.match(/\d+/)?.[0] || 0, 10);
+      const numB = parseInt(nameB.match(/\d+/)?.[0] || 0, 10);
+
+      return numA - numB;
+    });
+
+    items.forEach((item) => this.listTarget.appendChild(item));
   }
 }

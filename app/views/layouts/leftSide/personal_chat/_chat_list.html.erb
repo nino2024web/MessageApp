@@ -1,11 +1,11 @@
-  <!-- チャット一覧 -->
-<turbo-frame id="chat-list">
+<!-- チャット一覧 -->
+<div id="chat-list">
   <div class="chat-list-container">
     <% if all_chats.any? %>
       <ul class="chat-history">
         <% all_chats.uniq { |chat| chat.other_user(current_user).id }.each_with_index do |chat, index| %>
           <li class="chat-item <%= 'hidden' if index >= 5 %>">
-            <%= link_to personal_user_path(current_user, chat_id: chat.id), data: { turbo_frame: "_top" }, class: "chat-link" do %>
+            <%= link_to personal_user_path(current_user, chat_id: chat.id), class: "chat-link" do %>
               <span class="chat-left">
                 <span class="chat-name">
                   <%= chat.other_user(current_user).name %>
@@ -26,4 +26,4 @@
       <p class="no-chat-message">まだチャットがありません。</p>
     <% end %>
   </div>
-</turbo-frame>
+</div>

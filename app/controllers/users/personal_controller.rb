@@ -37,6 +37,8 @@ module Users
            .where.not(user_id: current_user.id)
            .where(read: [false, nil])
            .update_all(read: true)
+
+      @chat.reload
     end
   end
 end

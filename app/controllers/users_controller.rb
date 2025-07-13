@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def search
-    logger.debug '💥 UsersController#search 到達'
     @search_results = params[:name].present? ? perform_search : []
 
     html = render_to_string(

@@ -4,15 +4,20 @@
     <%= button_to "グループチャット", group_user_path(current_user), method: :get, class: "chat-toggle-btn" %>
   </div>
   <h3>チャット一覧</h3>
+  <div id="chat-list"
+     data-controller="personal--chat-list"
+     data-personal--chat-list-user-id-value="<%= current_user.id %>"
+     data-personal--chat-list-target="list">
   <%= render "layouts/leftSide/personal_chat/chat_list", all_chats: @all_chats, current_user: current_user %>
+  </div>
   <h3>友達リスト</h3>
   <%= render "layouts/leftSide/personal_chat/friend_list", all_friends: @all_friends %>
   <h3>友達リクエスト</h3>
   <div id="friend-requests"
-       data-controller="friend-requests"
-       data-friend-requests-user-id-value="<%= current_user.id %>"
-       data-friend-requests-target="list">
-    <div data-friend-requests-target="list">
+       data-controller="personal--friend-requests"
+       data-personal--friend-requests-user-id-value="<%= current_user.id %>"
+       data-personal--friend-requests-target="list">
+    <div data-personal--friend-requests-target="list">
       <%= render "layouts/leftSide/personal_chat/friend_requests",
       friend_requests: @friend_requests,
       users: @users,

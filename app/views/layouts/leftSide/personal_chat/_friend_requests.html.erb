@@ -1,9 +1,9 @@
   <!-- 友達リクエスト -->
 <div class="friend-requests-container"
      id="friend-requests"
-     data-controller="friend-request"
-     data-friend-request-user-id-value="<%= current_user.id %>"
-     data-friend-request-target="list">
+     data-controller="personal--friend-request"
+     data-personal--friend-request-user-id-value="<%= current_user.id %>"
+     data-personal--friend-request-target="list">
   <% if friend_requests.any? %>
     <ul class="friend-requests">
       <% friend_requests.each do |request| %>
@@ -11,13 +11,13 @@
         <li class="request-item" id="friend-request-<%= request.id %>">
           <span class="request-name"><%= request.sender.name %></span>
           <div class="request-actions"
-               data-controller="friend-request-buttons"
-               data-friend-request-buttons-id-value="<%= request.id %>"
-               data-friend-request-blocked-user-id-value="<%= request.sender.id %>"
-               data-friend-request-buttons-blocked-user-id-value="<%= request.sender.id %>">
-            <button class="accept-btn" data-action="click->friend-request-buttons#accept">承認</button>
-            <button class="reject-btn" data-action="click->friend-request-buttons#reject">拒否</button>
-            <button class="block-btn" data-action="click->friend-request-buttons#block">ブロック</button>
+               data-controller="personal--friend-request-buttons"
+               data-personal--friend-request-buttons-id-value="<%= request.id %>"
+               data-personal--friend-request-blocked-user-id-value="<%= request.sender.id %>"
+               data-personal--friend-request-buttons-blocked-user-id-value="<%= request.sender.id %>">
+            <button class="accept-btn" data-action="click->personal--friend-request-buttons#accept">承認</button>
+            <button class="reject-btn" data-action="click->personal--friend-request-buttons#reject">拒否</button>
+            <button class="block-btn" data-action="click->personal--friend-request-buttons#block">ブロック</button>
           </div>
         </li>
       <% end %>

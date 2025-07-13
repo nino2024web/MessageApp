@@ -145,7 +145,7 @@ class FriendRequestsController < ApplicationController
       partial: 'layouts/leftSide/personal_chat/friend_list',
       locals: { all_friends: user.friends }
     )
-    Rails.logger.debug "🔁 Broadcasting to friend_list_#{user.id}"
+
     ActionCable.server.broadcast("friend_list_#{user.id}", html)
   end
 

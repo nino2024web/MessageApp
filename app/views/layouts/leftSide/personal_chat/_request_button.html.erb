@@ -1,9 +1,9 @@
 <!-- buttonクリック後、リアルタイムにて切り替え -->
 <div id="friend-request-btn-<%= user.id %>"
-     data-controller="friend-request-buttons"
-     data-friend-request-buttons-user-id-value="<%= user.id %>"
-     data-friend-request-buttons-id-value="<%= friend_request&.id || 'null' %>"
-     data-friend-request-buttons-blocked-user-id-value="<%= user.id %>">
+     data-controller="personal--friend-request-buttons"
+     data-personal--friend-request-buttons-user-id-value="<%= user.id %>"
+     data-personal--friend-request-buttons-id-value="<%= friend_request&.id || 'null' %>"
+     data-personal--friend-request-buttons-blocked-user-id-value="<%= user.id %>">
   <% if current_user.friends.include?(user) %>
     <span class="friend-status">友達</span>
   <% elsif current_user.sent_friend_requests.where(receiver_id: user.id, status: 'pending').exists? %>
@@ -12,13 +12,13 @@
     <span class="friend-status">承認中</span>
   <% elsif current_user.sent_friend_requests.where(receiver_id: user.id, status: 'rejected').exists? %>
     <button class="requests-btn"
-            data-action="click->friend-request-buttons#request">
+            data-action="click->personal--friend-request-buttons#request">
       友達再申請
     </button>
   <% elsif current_user.blocks.exists?(blocked_user_id: user.id) || current_user.blockers.exists?(user.id) %>
   <% else %>
     <button class="requests-btn"
-            data-action="click->friend-request-buttons#request">
+            data-action="click->personal--friend-request-buttons#request">
       友達申請
     </button>
   <% end %>

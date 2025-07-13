@@ -2,46 +2,49 @@ class MessagesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @message = current_user.messages.build(message_params)
+    @message = current_user.messages.build(message_params.merge(read: false))
     @chat = @message.chat
 
     if @message.save
-      handle_successful_save
+      rendered_html = render_to_string(
+        partial: 'layouts/center/personal_chat/message',
+        locals: { message: @message, current_user: @message.user }
+      )
+      ActionCable.server.broadcast("chat_#{@chat.id}", rendered_html)
+
+      [@chat.user1, @chat.user2].each do |u|
+        chat_list_html = render_to_string(
+          partial: 'layouts/leftSide/personal_chat/chat_list',
+          locals: { all_chats: u.chats.order(updated_at: :desc), current_user: u }
+        )
+        ActionCable.server.broadcast("chat_list_#{u.id}", chat_list_html)
+      end
+
+      FriendsChannel.broadcast_to(
+        @chat.other_user(current_user),
+        {
+          type: 'new_unread_message',
+          chat_id: @chat.id,
+          unread_count: @chat.unread_count_for(@chat.other_user(current_user))
+        }
+      )
+
+      head :ok
     else
-      handle_failed_save
+      head :unprocessable_entity
     end
+  end
+
+  def mark_as_read
+    message = Message.find(params[:id])
+    return unless message.user_id != current_user.id && !message.read
+
+    message.update(read: true)
+
+    head :ok
   end
 
   private
-
-  def handle_successful_save
-    @saved_message = @message
-    @message = Message.new
-    respond_to(&:turbo_stream)
-  end
-
-  def handle_failed_save
-    load_chat_data
-    @message = Message.new
-    respond_to do |format|
-      format.turbo_stream { render_failed_turbo_stream }
-      format.html { render 'chats/show', status: :unprocessable_entity }
-    end
-  end
-
-  def load_chat_data
-    @all_chats = Chat.where(user1_id: current_user.id).or(Chat.where(user2_id: current_user.id))
-    @all_friends = current_user.friends
-    @friend_requests = current_user.received_friend_requests.pending.includes(:sender)
-  end
-
-  def render_failed_turbo_stream
-    render turbo_stream: turbo_stream.replace(
-      'chat-input',
-      partial: 'layouts/center/personal_chat/chat_input',
-      locals: { chat: @chat, message: @message }
-    )
-  end
 
   def message_params
     params.require(:message).permit(:content, :chat_id)

@@ -1,18 +1,17 @@
-<div data-controller="friend-search">
+<div data-controller="personal--friend-search">
   <%= form_with url: search_users_path,
-    method: :post,
-    local: true,
-    data: {
-      action: "submit->friend-search#search",
-      friend_search_target: "form"
-    },
-    html: {
-      class: "search_bar"
-    } do |f| %>
+                method: :post,
+                html: {
+                  class: "search_bar",
+                  data: {
+                    "personal--friend-search-target" => "form",
+                    "action" => "submit->personal--friend-search#search"
+                  }
+                } do |f| %>
     <%= f.text_field :name, placeholder: "名前で検索", class: "search-input" %>
-    <%= f.submit "検索", class: "search-button", data: { action: "click->friend-search#search" } %>
+    <%= f.submit "検索", class: "search-button", data: { action: "click->personal--friend-search#search" } %>
   <% end %>
-  <div id="search-results" data-friend-search-target="results">
+  <div id="search-results" data-personal--friend-search-target="results">
     <%= render "layouts/leftSide/personal_chat/search_results", search_results: @search_results || [] %>
   </div>
 </div>

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'friends/:friend_id/open_chat', to: 'friendships#open_chat', as: :open_chat_with_friend
   post 'chat_rooms/:id/invite', to: 'chat_rooms#invite', as: :invite_to_chat_room
   post 'start_chat/:id', to: 'users#start_chat', as: :start_chat_user
+  post 'messages/:id/mark_as_read', to: 'messages#mark_as_read'
 
   devise_for :users, controllers: {
     registrations: 'users/registrations',

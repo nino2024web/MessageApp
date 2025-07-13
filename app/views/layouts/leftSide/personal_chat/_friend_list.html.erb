@@ -1,9 +1,9 @@
   <!-- 友達リスト -->
 <div class="friend-list-container"
      id="friend-list"
-     data-controller="friend-list"
-     data-friend-list-user-id-value="<%= current_user.id %>">
-  <div data-friend-list-target="list">
+     data-controller="personal--friend-list"
+     data-personal--friend-list-user-id-value="<%= current_user.id %>">
+  <div data-personal--friend-list-target="list">
     <% if all_friends.any? %>
       <ul class="friend-list">
         <% all_friends.each_with_index do |friend, index| %>

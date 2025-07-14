@@ -2,53 +2,62 @@ class GroupMessagesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @chat_room = ChatRoom.find(params[:group_message][:chat_room_id])
-    @group_message = build_message
+    @group_message = current_user.group_messages.build(group_message_params)
+    @chat_room = @group_message.chat_room
 
-      if @group_message.save
-      @ordered_rooms = current_user.chat_rooms
-                                   .includes(:group_messages)
-                                   .sort_by do |room|
-        if room == @chat_room
-          [0, Time.current]
-        else
-          [1, -(room.group_messages.last&.created_at.to_i || 0)]
-        end
+    if @group_message.save
+      rendered_html = ApplicationController.renderer.render(
+        partial: 'layouts/center/group_chat/group_message',
+        locals: { group_message: @group_message, current_user: current_user }
+      )
+      ActionCable.server.broadcast("group_chat_#{@chat_room.id}", rendered_html)
+
+      @chat_room.users.where.not(id: current_user.id).each do |user|
+        GroupMessageRead.find_or_create_by!(
+          user: user,
+          group_message: @group_message,
+          chat_room: @chat_room
+        )
+
+        unread_html = ApplicationController.renderer.render(
+          partial: 'layouts/leftSide/group_chat/unread_count',
+          locals: { chat_room: @chat_room, current_user: user }
+        )
+
+        ActionCable.server.broadcast(
+          "user_#{user.id}_group_chat",
+          {
+            chat_room_id: @chat_room.id,
+            html: unread_html,
+            type: 'unread_count'
+          }
+        )
       end
-      handle_successful_save
+
+      render html: rendered_html
     else
-      handle_failed_save
+      render plain: '保存に失敗しました', status: :unprocessable_entity
     end
+  end
+
+  def mark_as_read
+    chat_room = ChatRoom.find(params[:chat_room_id])
+
+    unread_messages = chat_room.group_messages
+                               .where.not(user_id: current_user.id)
+                               .left_joins(:group_message_reads)
+                               .where(group_message_reads: { user_id: nil })
+
+    unread_messages.find_each do |message|
+      GroupMessageRead.create(user: current_user, group_message: message, chat_room: chat_room)
+    end
+
+    head :ok
   end
 
   private
 
-  def build_message
-    GroupMessage.new(group_message_params).tap do |message|
-      message.user = current_user
-    end
-  end
-
   def group_message_params
     params.require(:group_message).permit(:content, :chat_room_id)
-  end
-
-  def handle_successful_save
-    @ordered_rooms = current_user.chat_rooms.includes(:group_messages).sort_by do |room|
-      last_time = room.group_messages.last&.created_at || Time.at(0)
-      room.id == @chat_room.id ? [0, Time.current] : [1, -last_time.to_i]
-    end
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to group_user_path(current_user, chat_room_id: @chat_room.id) }
-    end
-  end
-
-  def handle_failed_save
-    respond_to do |format|
-      format.turbo_stream { head :unprocessable_entity }
-
-      redirect_to group_user_path(current_user, chat_room_id: @chat_room.id)
-    end
   end
 end

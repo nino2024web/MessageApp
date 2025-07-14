@@ -20,6 +20,13 @@ Rails.application.routes.draw do
 
   root to: 'users#show'
 
+  resources :group_messages do
+    collection do
+      post :mark_as_read
+    end
+  end
+
+
   resources :messages, only: [:create]
   resources :friendships, only: [:index]
   resources :friend_requests, only: %i[create update index]

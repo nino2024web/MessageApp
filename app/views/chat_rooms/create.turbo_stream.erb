@@ -1,6 +1,0 @@
-<%= turbo_stream.prepend "group-chat-list" do %>
-  <%= render partial: "layouts/leftSide/group_chat/group_chat_item", locals: { chat_room: @chat_room } %>
-<% end %>
-<%= turbo_stream.replace "group-create-form" do %>
-  <%= render partial: "layouts/leftSide/group_chat/group_create_form", locals: { chat_room: ChatRoom.new, success_message: "グループを作成しました" } %>
-<% end %>

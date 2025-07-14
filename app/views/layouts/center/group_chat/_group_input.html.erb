@@ -1,15 +1,16 @@
-<div class="chat-input-container group" id="chat-input" data-controller="submit-on-enter">
-  <%= form_with model: group_message,
-                url: group_messages_path,
-                data: { turbo_stream: true },
-                local: false,
-                html: { data: { submit_on_enter_target: "form" } } do |f| %>
-    <%= f.text_area :content,
-                    rows: 2,
-                    class: 'chat-textarea',
-                    placeholder: "メッセージを入力してください",
-                    data: { submit_on_enter_target: "input", action: "keydown->submit-on-enter#sendOnEnter" } %>
-    <%= f.hidden_field :chat_room_id, value: chat_room.id %>
-    <%= f.submit "送信", class: 'chat-submit-btn' %>
-  <% end %>
+<div class="chat-input-container group" id="chat-chat-input">
+  <form action="<%= group_messages_path %>" method="post"
+        data-controller="group--group-message-form"
+        data-action="submit->group--group-message-form#sendMessage">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <textarea name="group_message[content]"
+              rows="2"
+              class="chat-textarea"
+              placeholder="メッセージを入力してください"
+              required
+              data-action="keydown->group--group-message-form#checkEnter">
+    </textarea>
+    <%= hidden_field_tag 'group_message[chat_room_id]', @chat_room.id %>
+    <button type="submit" class="chat-submit-btn">送信</button>
+  </form>
 </div>

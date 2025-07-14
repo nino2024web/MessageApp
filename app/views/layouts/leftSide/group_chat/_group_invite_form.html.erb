@@ -1,16 +1,22 @@
 <div id="group-invite-wrapper">
   <% if @chat_room.present? %>
     <% if @invite_candidates.any? %>
-      <div class="group-invite-form" id="group-invite-form">
-        <%= form_with url: invite_to_chat_room_path(@chat_room), method: :post, data: { turbo_stream: true }, local: false do %>
-          <label for="user_id">招待する友達を選択:</label>
-          <%= select_tag :user_id, options_from_collection_for_select(@invite_candidates, :id, :name), prompt: "選択してください", class: "invite-select" %>
-          <%= submit_tag "招待する", class: "invite-button" %>
-        <% end %>
+      <div class="group-invite-form"
+           id="group-invite-form"
+           data-controller="group--group-invite-form"
+           data-group--group-invite-form-chat-room-id-value="<%= @chat_room.id %>">
+        <form data-action="submit->group--group-invite-form#submit">
+          <%= select_tag :user_id,
+              options_from_collection_for_select(@invite_candidates, :id, :name),
+              prompt: "選択してください", class: "invite-select", required: true %>
+          <button type="submit" class="invite-button">招待する</button>
+        </form>
+        <div id="invite-error" class="form-errors"></div>
       </div>
     <% else %>
       <p>招待できる友達がいません。</p>
     <% end %>
+
     <div class="group-members-list">
       <p class="member-title">現在のメンバー:</p>
       <ul class="member-scroll">

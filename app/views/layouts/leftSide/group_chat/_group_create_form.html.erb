@@ -1,5 +1,5 @@
-<div class="group-create-form" id="group-create-form">
-  <%= form_with model: chat_room, url: chat_rooms_path, data: { turbo: true }, local: false do |f| %>
+<div class="group-create-form" id="group-create-form" data-controller="group--group-create" data-action="submit->group--group-create#create" >
+  <form>
     <% if defined?(success_message) && success_message.present? %>
       <p class="form-success"><%= success_message %></p>
     <% elsif chat_room.errors.any? %>
@@ -13,7 +13,7 @@
         <% end %>
       </ul>
     <% end %>
-    <%= f.text_area :name, rows: 1, class: "group-textarea", placeholder: "グループ名を入力" %>
-    <%= f.submit "作成", class: "group-create-btn" %>
-  <% end %>
+    <textarea name="chat_room[name]" rows="1" class="group-textarea" placeholder="グループ名を入力" maxlength="10" required></textarea>
+    <button type="submit" class="group-create-btn">作成</button>
+  </form>
 </div>

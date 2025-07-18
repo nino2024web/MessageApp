@@ -1,4 +1,6 @@
-<li id="group-chat-item-<%= chat_room.id %>" class="chat-item data-action="click->group--group-list#activate">
+<li id="group-chat-item-<%= chat_room.id %>"
+    class="chat-item"
+    data-action="click->group--group-list#activate">
   <%= link_to group_user_path(current_user, chat_room_id: chat_room.id), class: "chat-link" do %>
     <div class="chat-name">
       <%= chat_room.name %>（<%= chat_room.users.count %>人）
@@ -10,7 +12,7 @@
       </span>
     </div>
     <div class="chat-preview">
-      <%= truncate(chat_room.group_messages.last&.content, length: 5) %>
+      <%= truncate(chat_room.group_messages.last&.content.to_s, length: 5) %>
     </div>
   <% end %>
 </li>

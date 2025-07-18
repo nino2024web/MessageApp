@@ -1,4 +1,5 @@
 class ChatsController < ApplicationController
+  #   # 個別チャット
   before_action :authenticate_user!
   before_action :set_chat
 

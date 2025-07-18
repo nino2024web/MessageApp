@@ -1,5 +1,8 @@
-<div class="group-create-form" id="group-create-form" data-controller="group--group-create" data-action="submit->group--group-create#create" >
-  <form>
+<div class="group-create-form" id="group-create-form">
+  <form
+    data-controller="group--group-create"
+    data-action="submit->group--group-create#create keydown->group--group-create#checkEnter"
+    >
     <% if defined?(success_message) && success_message.present? %>
       <p class="form-success"><%= success_message %></p>
     <% elsif chat_room.errors.any? %>

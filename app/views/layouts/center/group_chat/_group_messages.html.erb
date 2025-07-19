@@ -4,8 +4,9 @@
      data-group-chat-room-id-value="<%= chat_room.id %>"
      data-common--scroll-target="append">
   <div id="group-messages-append">
-    <%= render partial: "layouts/center/group_chat/group_messages",
-           locals: { chat_room: @chat_room,
-           group_messages: @group_messages, current_user: current_user } %>
+    <% group_messages.each do |message| %>
+      <%= render partial: "layouts/center/group_chat/group_message",
+                 locals: { message: message, current_user: current_user } %>
+    <% end %>
   </div>
 </div>

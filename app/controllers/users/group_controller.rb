@@ -46,12 +46,17 @@ module Users
     end
 
     def sort_rooms_by_last_message
-      @chat_rooms.sort_by { |room| room.group_messages.last&.created_at.to_i || 0 }.reverse
+      @chat_rooms.sort_by do |room|
+        latest_activity = room.group_messages.last&.created_at || room.created_at
+        -latest_activity.to_i
+      end
     end
 
     def sort_rooms_with_current_room
       @chat_rooms.sort_by do |room|
-        [room.id == @chat_room.id ? 0 : 1, -(room.group_messages.last&.created_at.to_i || 0)]
+        is_current = room.id == @chat_room.id ? 0 : 1
+        latest_activity = room.group_messages.last&.created_at || room.created_at
+        [is_current, -latest_activity.to_i]
       end
     end
   end

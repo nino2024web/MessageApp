@@ -8,7 +8,7 @@ class GroupMessagesController < ApplicationController
     if @group_message.save
       rendered_html = ApplicationController.renderer.render(
         partial: 'layouts/center/group_chat/group_message',
-        locals: { group_message: @group_message, current_user: current_user }
+        locals: { message: @group_message, current_user: current_user }
       )
       ActionCable.server.broadcast("group_chat_#{@chat_room.id}", rendered_html)
 

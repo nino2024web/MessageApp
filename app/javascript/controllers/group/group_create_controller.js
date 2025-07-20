@@ -19,24 +19,27 @@ export default class extends Controller {
         body: formData,
       });
 
-      // JSON形式にてスレポンス返す
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // 成功処理
+        // 成功時：チャットリストに追加、フォームを初期化、エラー消す
         document
           .getElementById("other-group-chat-list")
-          .insertAdjacentHTML("afterbegin", data.html);
+          .insertAdjacentHTML("afterbegin", data.chat_html);
+
         form.reset();
-        const errorBox = document.getElementById("group-create-error");
-        if (errorBox) errorBox.textContent = "";
+
+        // フォームも置き換え（errorsなしの新しいChatRoomで描画されたform）
+        const wrapper = document.getElementById("group-create-form");
+        const newWrapper = document.createElement("div");
+        newWrapper.innerHTML = data.form_html;
+        wrapper.replaceWith(newWrapper.firstElementChild);
       } else {
-        // バリデーション失敗などの正常なエラー（主にブラウザ側422ステータスコード）
-        this.replaceForm(data.html);
+        // 失敗時：エラー付きformに置き換え
+        this.replaceForm(data.form_html);
       }
     } catch (err) {
-      // fetch 自体が失敗（サーバーダウン等）
-      console.warn("⚠️ グループ作成に失敗しました", err);
+      console.warn("グループ作成に失敗しました", err);
     }
   }
 

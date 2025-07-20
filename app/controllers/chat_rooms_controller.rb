@@ -8,25 +8,36 @@ class ChatRoomsController < ApplicationController
     if @chat_room.save
       ChatRoomUser.create(user: current_user, chat_room: @chat_room)
 
-      html = render_to_string(
+      chat_item_html = render_to_string(
         partial: 'layouts/leftSide/group_chat/group_chat_item',
-        locals: { chat_room: @chat_room }
+        locals: { chat_room: @chat_room },
+        formats: [:html]
+      )
+
+      clean_room = ChatRoom.new
+      form_html = render_to_string(
+        partial: 'layouts/leftSide/group_chat/group_create_form',
+        locals: { chat_room: clean_room },
+        formats: [:html]
       )
 
       render json: {
         success: true,
-        html: html,
+        chat_html: chat_item_html,
+        form_html: form_html,
         chat_room_id: @chat_room.id
       }
+
     else
       form_html = render_to_string(
         partial: 'layouts/leftSide/group_chat/group_create_form',
-        locals: { chat_room: @chat_room }
+        locals: { chat_room: @chat_room },
+        formats: [:html]
       )
 
       render json: {
         success: false,
-        html: form_html
+        form_html: form_html
       }, status: :unprocessable_entity
 
     end

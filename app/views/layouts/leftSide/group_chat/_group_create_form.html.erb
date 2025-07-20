@@ -3,9 +3,7 @@
     data-controller="group--group-create"
     data-action="submit->group--group-create#create keydown->group--group-create#checkEnter"
     >
-    <% if defined?(success_message) && success_message.present? %>
-      <p class="form-success"><%= success_message %></p>
-    <% elsif chat_room.errors.any? %>
+    <% if chat_room.errors.any? %>
       <ul class="form-errors">
         <% if chat_room.errors.details[:name].any? { |e| e[:error] == :taken } %>
           <li>既に同じグループ名で作成されています</li>

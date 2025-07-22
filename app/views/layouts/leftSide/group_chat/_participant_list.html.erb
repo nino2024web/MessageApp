@@ -1,0 +1,8 @@
+<ul class="member-scroll" id="participant-list">
+  <% chat_room.sorted_members.each do |member| %>
+    <li>
+      <%= member.name %>
+      <%= '（作成者）' if member.id == chat_room.creator_id %>
+    </li>
+  <% end %>
+</ul>

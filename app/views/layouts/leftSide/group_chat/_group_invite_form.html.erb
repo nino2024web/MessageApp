@@ -1,31 +1,16 @@
 <div id="group-invite-wrapper">
   <% if @chat_room.present? %>
     <% if @invite_candidates.any? %>
-      <div class="group-invite-form"
-           id="group-invite-form"
-           data-controller="group--group-invite-form"
-           data-group--group-invite-form-chat-room-id-value="<%= @chat_room.id %>">
-        <form data-action="submit->group--group-invite-form#submit">
-          <%= select_tag :user_id,
-              options_from_collection_for_select(@invite_candidates, :id, :name),
-              prompt: "選択してください", class: "invite-select", required: true %>
-          <button type="submit" class="invite-button">招待する</button>
-        </form>
-        <div id="invite-error" class="form-errors"></div>
-      </div>
+      <%= render partial: "layouts/leftSide/group_chat/invite_candidates",
+                 locals: { chat_room: @chat_room, invite_candidates: @invite_candidates } %>
     <% else %>
       <p>招待できる友達がいません。</p>
     <% end %>
     <div class="group-members-list">
-      <p class="member-title">現在のメンバー:</p>
-      <ul class="member-scroll">
-        <% @sorted_members.each do |member| %>
-          <li>
-            <%= member.name %>
-            <%= '（作成者）' if member.id == @chat_room.creator_id %>
-          </li>
-        <% end %>
-      </ul>
+      <p class="member-title">
+        現在のメンバー: <span id="participant-count"><%= @chat_room.users.count %>人</span>
+      </p>
+      <%= render partial: "layouts/leftSide/group_chat/participant_list", locals: { chat_room: @chat_room } %>
     </div>
   <% end %>
 </div>

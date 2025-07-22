@@ -21,7 +21,7 @@ consumer.subscriptions.create("UserGroupChatChannel", {
 
     // 招待候補の更新
     if (data.type === "update_inviteCandidates") {
-      const wrapper = document.getElementById("group-invite-wrapper");
+      const wrapper = document.getElementById("invite-candidates-block");
       if (wrapper) {
         wrapper.innerHTML = data.html;
       } else {

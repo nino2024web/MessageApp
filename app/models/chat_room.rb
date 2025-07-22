@@ -9,6 +9,10 @@ class ChatRoom < ApplicationRecord
     users.find_by(id: creator_id)
   end
 
+  def sorted_members
+    users.order(:id)
+  end
+
   # 自分以外の未読メッセージ数
   def unread_count_for(user)
     group_messages
@@ -27,5 +31,13 @@ class ChatRoom < ApplicationRecord
       .find_each do |message|
         GroupMessageRead.create(user: user, group_message: message, chat_room: self)
       end
+  end
+
+  # 自身の友達でないユーザー or 既にグループチャットにいるユーザー除外
+  def invitable_users(current_user)
+    friend_ids = current_user.friends.pluck(:id)
+    joined_ids = users.pluck(:id)
+
+    User.where(id: friend_ids - joined_ids)
   end
 end

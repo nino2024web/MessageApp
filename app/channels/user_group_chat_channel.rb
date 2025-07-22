@@ -1,6 +1,6 @@
 class UserGroupChatChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "user_#{params[:user_id]}_group_chat"
+    stream_from "user_group_chat_#{current_user.id}"
   end
 
   def unsubscribed

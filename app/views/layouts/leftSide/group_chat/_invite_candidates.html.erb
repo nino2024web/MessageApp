@@ -1,0 +1,19 @@
+<% if invite_candidates.any? %>
+  <div class="group-invite-form" id="group-invite-form">
+    <form
+       data-controller="group--group-invite-form"
+       data-group--group-invite-form-chat-room-id-value="<%= chat_room.id %>"
+       data-action="submit->group--group-invite-form#submit">
+      <select name="user_id" class="invite-select" required>
+        <option value="">選択してください</option>
+        <% invite_candidates.each do |user| %>
+          <option value="<%= user.id %>"><%= user.name %></option>
+        <% end %>
+      </select>
+      <button type="submit" class="invite-button">招待する</button>
+    </form>
+    <div id="invite-error" class="form-errors"></div>
+  </div>
+<% else %>
+  <p>招待できる友達がいません。</p>
+<% end %>

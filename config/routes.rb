@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post 'chat_rooms/:id/invite', to: 'chat_rooms#invite', as: :invite_to_chat_room
   post 'start_chat/:id', to: 'users#start_chat', as: :start_chat_user
   post 'messages/:id/mark_as_read', to: 'messages#mark_as_read'
+  post 'group_chats/broadcast_updated_chat_item', to: 'group_chats#broadcast_updated_chat_item'
 
   devise_for :users, controllers: {
     registrations: 'users/registrations',
@@ -25,7 +26,6 @@ Rails.application.routes.draw do
       post :mark_as_read
     end
   end
-
 
   resources :messages, only: [:create]
   resources :friendships, only: [:index]

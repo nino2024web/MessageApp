@@ -51,17 +51,23 @@ class ChatRoomsController < ApplicationController
       ChatRoomUser.find_or_create_by(chat_room: @chat_room, user: friend)
 
       # 招待されたユーザー向けHTML
-      html = render_to_string(
-        partial: 'layouts/leftSide/group_chat/group_chat_item',
-        locals: { chat_room: @chat_room, current_user: friend }
-      )
+      begin
+        html = render_to_string(
+          partial: 'layouts/leftSide/group_chat/group_chat_item',
+          formats: [:html],
+          locals: { chat_room: @chat_room, current_user: friend }
+        )
 
-      ActionCable.server.broadcast(
-        "user_#{friend.id}_group_chat",
-        { html: html, chat_room_id: @chat_room.id }
-      )
+        ActionCable.server.broadcast(
+          "user_#{friend.id}_group_chat",
+          { html: html, chat_room_id: @chat_room.id }
+        )
 
-      render json: { success: true }
+        render json: { success: true }
+      rescue StandardError => e
+        Rails.logger.error("❌ 招待ビューのrender_to_stringでエラー: #{e.message}")
+        render json: { success: false, error: '招待の描画中にエラーが発生しました。' }, status: :internal_server_error
+      end
     else
       render json: {
         success: false, error: 'このユーザーはあなたの友達ではありません。'

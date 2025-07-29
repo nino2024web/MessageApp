@@ -26,7 +26,7 @@ class GroupChatsController < ApplicationController
       )
 
       ActionCable.server.broadcast(
-        "user_group_chat_#{user.id}",
+        "user_#{user.id}_group_chat",
         {
           type: 'update_members',
           count_html: "#{chat_room.users.count}人",
@@ -47,7 +47,7 @@ class GroupChatsController < ApplicationController
       )
 
       ActionCable.server.broadcast(
-        "user_group_chat_#{user.id}",
+        "user_#{user.id}_group_chat",
         {
           type: 'update_inviteCandidates',
           html: invite_candidates_html

@@ -8,8 +8,8 @@
               class="chat-textarea"
               placeholder="メッセージを入力してください"
               required
-              data-action="keydown->group--group-message-form#checkEnter">
-    </textarea>
+              data-group--group-message-form-target="textarea"
+              data-action="keydown->group--group-message-form#checkEnter"></textarea>
     <%= hidden_field_tag 'group_message[chat_room_id]', @chat_room.id %>
     <button type="submit" class="chat-submit-btn">送信</button>
   </form>

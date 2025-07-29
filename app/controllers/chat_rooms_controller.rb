@@ -65,7 +65,6 @@ class ChatRoomsController < ApplicationController
 
         render json: { success: true }
       rescue StandardError => e
-        Rails.logger.error("❌ 招待ビューのrender_to_stringでエラー: #{e.message}")
         render json: { success: false, error: '招待の描画中にエラーが発生しました。' }, status: :internal_server_error
       end
     else

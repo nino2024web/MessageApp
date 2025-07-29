@@ -3,9 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { chatRoomId: Number };
 
-  connect() {
-    console.log("🧩 group--group-invite-form controller connected");
-  }
+  connect() {}
 
   async submit(event) {
     event.preventDefault();
@@ -14,8 +12,6 @@ export default class extends Controller {
     const csrfToken = document.querySelector(
       "meta[name='csrf-token']"
     )?.content;
-
-    console.log("✅ invite fetch start");
 
     try {
       const response = await fetch(

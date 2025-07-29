@@ -1,15 +1,11 @@
 import consumer from "channels/consumer";
 
 consumer.subscriptions.create("UserGroupChatChannel", {
-  connected() {
-    console.log("✅ UserGroupChatChannel connected");
-  },
+  connected() {},
 
   disconnected() {},
 
   received(data) {
-    console.log("📩 受信:", data);
-
     // メンバー表示の更新（人数とリスト）
     if (data.type === "update_members") {
       const countElem = document.querySelector("#participant-count");
@@ -21,7 +17,7 @@ consumer.subscriptions.create("UserGroupChatChannel", {
 
     // 招待候補の更新
     if (data.type === "update_inviteCandidates") {
-      const wrapper = document.getElementById("group-invite-wrapper");
+      const wrapper = document.getElementById("invite-candidates-block");
       if (wrapper) {
         wrapper.innerHTML = data.html;
       } else {
@@ -44,6 +40,20 @@ consumer.subscriptions.create("UserGroupChatChannel", {
         const list = document.getElementById(targetList);
         if (list) list.insertAdjacentHTML("beforeend", data.html);
       }
+    }
+
+    // 未読数表示の更新
+    if (data.type === "unread_count") {
+      const id = `unread-count-group-${data.chat_room_id}`;
+      const elem = document.getElementById(id);
+      if (elem) elem.innerHTML = data.html;
+    }
+
+    // チャット項目の全置換
+    if (data.type === "replace") {
+      const id = `group-chat-item-${data.chat_room_id}`;
+      const elem = document.getElementById(id);
+      if (elem) elem.outerHTML = data.html;
     }
   },
 });

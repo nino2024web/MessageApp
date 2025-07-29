@@ -6,12 +6,18 @@ class GroupMessagesController < ApplicationController
     @chat_room = @group_message.chat_room
 
     if @group_message.save
-      rendered_html = ApplicationController.renderer.render(
+      rendered_html = render_to_string(
         partial: 'layouts/center/group_chat/group_message',
         locals: { message: @group_message, current_user: current_user }
       )
-      ActionCable.server.broadcast("group_chat_#{@chat_room.id}", rendered_html)
 
+      ActionCable.server.broadcast("group_chat_#{@chat_room.id}", {
+                                     type: 'message',
+                                     chat_room_id: @chat_room.id,
+                                     html: rendered_html
+                                   })
+
+      # 未読数更新
       @chat_room.users.where.not(id: current_user.id).each do |user|
         GroupMessageRead.find_or_create_by!(
           user: user,
@@ -19,7 +25,7 @@ class GroupMessagesController < ApplicationController
           chat_room: @chat_room
         )
 
-        unread_html = ApplicationController.renderer.render(
+        unread_html = render_to_string(
           partial: 'layouts/leftSide/group_chat/unread_count',
           locals: { chat_room: @chat_room, current_user: user }
         )
@@ -34,7 +40,24 @@ class GroupMessagesController < ApplicationController
         )
       end
 
-      render html: rendered_html
+      # leftSideのチャット項目全体を更新
+      group_chat_html = render_to_string(
+        partial: 'layouts/leftSide/group_chat/group_chat_item',
+        locals: { chat_room: @chat_room, current_user: current_user }
+      )
+
+      @chat_room.users.each do |user|
+        ActionCable.server.broadcast(
+          "user_#{user.id}_group_chat",
+          {
+            chat_room_id: @chat_room.id,
+            html: group_chat_html,
+            type: 'replace'
+          }
+        )
+      end
+
+      render plain: rendered_html, content_type: 'text/html'
     else
       render plain: '保存に失敗しました', status: :unprocessable_entity
     end

@@ -1,9 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static targets = ["textarea"];
+
   sendMessage(e) {
     e.preventDefault();
     const form = this.element;
+    const textarea = this.textareaTarget;
+    const content = textarea.value.trim();
+
+    if (content === "") {
+      textarea.placeholder = "空白です。メッセージを入力してください";
+      return;
+    }
+
     const formData = new FormData(form);
 
     fetch(form.action, {
@@ -20,10 +30,11 @@ export default class extends Controller {
       })
       .then((_html) => {
         form.reset();
+        textarea.placeholder = "メッセージを入力してください";
       })
       .catch((error) => {
         console.error("fetchエラー発生:", error);
-        alert("メッセージの送信に失敗しました。");
+        textarea.placeholder = "エラー発生しました。再試行してください";
       });
   }
 

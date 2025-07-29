@@ -1,11 +1,13 @@
 <div id="group-invite-wrapper">
   <% if @chat_room.present? %>
-    <% if @invite_candidates.any? %>
-      <%= render partial: "layouts/leftSide/group_chat/invite_candidates",
+    <div id="invite-candidates-block">
+      <% if @invite_candidates.any? %>
+        <%= render partial: "layouts/leftSide/group_chat/invite_candidates",
                  locals: { chat_room: @chat_room, invite_candidates: @invite_candidates } %>
-    <% else %>
-      <p>招待できる友達がいません。</p>
-    <% end %>
+      <% else %>
+        <p>招待できる友達がいません。</p>
+      <% end %>
+    </div>
     <div class="group-members-list">
       <p class="member-title">
         現在のメンバー: <span id="participant-count"><%= @chat_room.users.count %>人</span>

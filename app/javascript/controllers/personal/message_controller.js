@@ -49,6 +49,8 @@ export default class extends Controller {
           });
         }
 
+
+
         // message左右分け処理
         messageNode.classList.remove("own-message", "other-message");
         if (userId === currentUserId) {
@@ -56,6 +58,9 @@ export default class extends Controller {
         } else {
           messageNode.classList.add("other-message");
         }
+
+
+
 
         this.messagesContainer.appendChild(messageNode);
 

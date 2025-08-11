@@ -7,6 +7,38 @@ class GroupChatsController < ApplicationController
     @group_message = GroupMessage.new
   end
 
+  def destroy
+    chat_room = ChatRoom.find(params[:id])
+
+    if chat_room.creator_id == current_user.id
+      # 非削除側ユーザーに通知を送る
+      chat_room.users.where.not(id: current_user.id).each do |user|
+        ActionCable.server.broadcast(
+          "group_chat_#{chat_room.id}_user_#{user.id}",
+          {
+            type: 'deleted_by_creator',
+            chat_room_id: chat_room.id,
+            message: 'このグループチャットは作成者によって削除されました。'
+          }
+        )
+      end
+
+      # 実データ削除
+      ChatRoomUser.where(chat_room_id: chat_room.id).delete_all
+      GroupMessage.where(chat_room_id: chat_room.id).delete_all
+      GroupMessageRead.where(chat_room_id: chat_room.id).delete_all
+
+      chat_room.destroy
+    else
+
+      # 作成者以外 → 中間テーブルから自分を削除(退会)
+      membership = ChatRoomUser.find_by(user_id: current_user.id, chat_room_id: chat_room.id)
+      membership&.destroy
+    end
+
+    head :ok
+  end
+
   def broadcast_updated_chat_item
     chat_room = ChatRoom.find(params[:chat_room_id])
 

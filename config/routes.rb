@@ -33,4 +33,5 @@ Rails.application.routes.draw do
   resources :blocks, only: %i[create destroy]
   resources :chat_rooms, only: %i[new create]
   resources :group_messages, only: [:create]
+  resources :group_chats, only: %i[show destroy]
 end

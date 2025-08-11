@@ -1,10 +1,13 @@
-<div class="left-side">
+<div class="left-side"
+     data-controller="group--group-chat-list"
+     data-group--group-chat-list-chat-room-id-value="<%= @chat_room&.id %>"
+     data-group--group-chat-list-user-id-value="<%= current_user.id %>">
   <div class="chat-toggle-buttons">
     <%= button_to "個人チャット", personal_user_path(current_user), method: :get, class: "chat-toggle-btn" %>
     <%= button_to "グループチャット", group_user_path(current_user), method: :get, class: "chat-toggle-btn" %>
   </div>
   <h3><%= current_user.name %>さんが参加している</br>グループチャット</h3>
-<%= render "layouts/leftSide/group_chat/group_chat_list",locals: { chat_rooms: @chat_rooms, current_chat_room: @chat_room } %>
+<%= render "layouts/leftSide/group_chat/group_chat_list", locals: { chat_rooms: @chat_rooms, current_chat_room: @chat_room } %>
 <h3>グループに友達を招待</h3>
 <%= render "layouts/leftSide/group_chat/group_invite_form", chat_room: @chat_room, friends: @all_friends %>
 <h3>新しいグループチャットを作成</h3>

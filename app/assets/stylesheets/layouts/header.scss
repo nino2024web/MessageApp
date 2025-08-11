@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,27 +11,48 @@
   padding: 10px 20px;
   z-index: 1000;
 
-  .user-name {
+  .user-info {
     font-weight: bold;
     color: #333;
   }
 
   .chat-title {
-    margin: 0;
     font-size: 18px;
     font-weight: bold;
+    margin-left: 20px;
   }
 
-  .logout-link {
-    background-color: #f44336;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
+  .header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    &:hover {
+    button,
+    .logout-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .group-delete-button {
       background-color: #d32f2f;
+      color: white;
+    }
+
+    .group-leave-button {
+      background-color: #9e9e9e;
+      color: white;
+    }
+
+    .logout-btn {
+      background-color: #f44336;
+      color: white;
+
+      &:hover {
+        background-color: #d32f2f;
+      }
     }
   }
 }

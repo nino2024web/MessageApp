@@ -1,4 +1,10 @@
-<header class="header">
+<header class="header"
+  <% if @chat_room.present? %>
+    data-controller="group--group-chat-list"
+    data-group--group-chat-list-user-id-value="<%= current_user.id %>"
+    data-group--group-chat-list-chat-room-id-value="<%= @chat_room.id %>"
+  <% end %>
+>
   <div class="user-info">
     <span class="user-name">
       ようこそ、<%= current_user.name %> さん！
@@ -13,9 +19,24 @@
       <%= @chat_room.name %>グループでチャットしています。
     </div>
   <% end %>
-  <div class="logout-button">
-    <%= button_to "ログアウト", destroy_user_session_path,
-            method: :delete,
-            class: "logout-link" %>
+  <div class="header-buttons">
+    <% if @chat_room.present? %>
+      <% if current_user.id == @chat_room.creator_id %>
+        <button
+          class="group-delete-button"
+          data-action="click->group--group-chat-list#confirmDelete"
+          data-group-chat-id="<%= @chat_room.id %>">
+          グループチャットを削除
+        </button>
+      <% else %>
+        <button
+          class="group-leave-button"
+          data-action="click->group--group-chat-list#confirmLeave"
+          data-group-chat-id="<%= @chat_room.id %>">
+          グループチャットを退会
+        </button>
+      <% end %>
+    <% end %>
+    <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "logout-btn" %>
   </div>
 </header>

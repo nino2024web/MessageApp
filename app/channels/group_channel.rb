@@ -1,7 +1,7 @@
 class GroupChannel < ApplicationCable::Channel
   def subscribed
-    chat_room = ChatRoom.find(params[:chat_room_id])
-    stream_from "group_chat_#{chat_room.id}"
+    stream_from "group_chat_#{params[:chat_room_id]}"
+    stream_from "group_chat_#{params[:chat_room_id]}_user_#{params[:user_id]}"
   end
 
   def unsubscribed

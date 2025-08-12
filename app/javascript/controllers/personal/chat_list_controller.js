@@ -9,9 +9,22 @@ export default class extends Controller {
     this.subscription = createConsumer().subscriptions.create(
       { channel: "ChatListChannel", user_id: this.userIdValue },
       {
-        received: (html) => {
-          if (this.hasListTarget) {
-            this.listTarget.innerHTML = html;
+        received: (payload) => {
+          if (!this.hasListTarget) return;
+
+          // 文字列 or html 両対応
+          const html = typeof payload === "string" ? payload : payload?.html;
+          if (!html) return;
+
+          this.listTarget.innerHTML = html;
+
+          // いま表示中の chat_id の未読だけ消す
+          const id = new URLSearchParams(location.search).get("chat_id");
+          if (id) {
+            const wrap = this.listTarget.querySelector(
+              `#unread-count-personal-${CSS.escape(id)}`
+            );
+            if (wrap) wrap.innerHTML = "";
           }
         },
       }

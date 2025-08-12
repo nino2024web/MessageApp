@@ -37,10 +37,16 @@ class MessagesController < ApplicationController
 
   def mark_as_read
     message = Message.find(params[:id])
-    return unless message.user_id != current_user.id && !message.read
+    return head :forbidden if message.user_id == current_user.id
+    return head :ok if message.read?
 
-    message.update(read: true)
+    message.update!(read: true)
 
+    html = render_to_string(
+      partial: 'layouts/leftSide/personal_chat/chat_list',
+      locals: { all_chats: current_user.chats.order(updated_at: :desc), current_user: current_user }
+    )
+    ActionCable.server.broadcast("chat_list_#{current_user.id}", html)
     head :ok
   end
 

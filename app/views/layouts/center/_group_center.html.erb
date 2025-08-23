@@ -1,14 +1,8 @@
 <div class="group-center-area">
   <div class="center-area">
-    <%= render partial: "layouts/center/group_chat/group_messages",
-           locals: {
-             group_messages: @group_messages,
-             chat_room: @chat_room
-           } %>
-    <%= render partial: "layouts/center/group_chat/group_input",
-           locals: {
-             chat_room: @chat_room,
-             group_message: @group_message
-           } %>
+    <%= render "layouts/center/group_chat/group_messages",
+              group_messages: @group_messages, chat_room: @chat_room %>
+    <%= render "layouts/center/group_chat/group_input",
+          chat_room: @chat_room, group_message: @group_message %>
   </div>
 </div>

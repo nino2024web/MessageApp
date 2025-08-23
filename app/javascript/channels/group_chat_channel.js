@@ -1,18 +1,14 @@
 import consumer from "channels/consumer";
 
-const element = document.getElementById("group-messages");
-
-if (element) {
-  const chatRoomId = element.dataset.groupChatRoomId;
-
+// 部屋ごとのメッセージ本文（センター）用ストリーム
+export const subscribeRoomStream = (chatRoomId, onReceive = () => {}) =>
   consumer.subscriptions.create(
     { channel: "GroupChatChannel", chat_room_id: chatRoomId },
     {
       connected() {},
-
+      disconnected() {},
       received(data) {
-        callback(data);
+        if (typeof onReceive === "function") onReceive(data);
       },
     }
   );
-}

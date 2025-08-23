@@ -2,7 +2,7 @@ class GroupChatsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @chat_room = GroupChat.find(params[:id])
+    @chat_room = ChatRoom.find(params[:id])
     @group_messages = @chat_room.group_messages.includes(:user)
     @group_message = GroupMessage.new
   end
@@ -14,7 +14,7 @@ class GroupChatsController < ApplicationController
       # 非削除側ユーザーに通知を送る
       chat_room.users.where.not(id: current_user.id).each do |user|
         ActionCable.server.broadcast(
-          "group_chat_#{chat_room.id}_user_#{user.id}",
+          "user_#{user.id}_group_chat",
           {
             type: 'deleted_by_creator',
             chat_room_id: chat_room.id,

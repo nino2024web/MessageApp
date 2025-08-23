@@ -1,42 +1,37 @@
-// app/javascript/controllers/group/group_chat_list_controller.js
 import { Controller } from "@hotwired/stimulus";
-import { subscribeToGroupChat } from "channels/group_channel";
+import consumer from "../../channels/consumer";
 
 export default class extends Controller {
   static values = { chatRoomId: Number, userId: Number };
 
   connect() {
-    this.subscription = subscribeToGroupChat(
-      this.chatRoomIdValue,
-      this.userIdValue,
-      (data) => this.handleData(data)
+    // 既存処理があれば残す
+    this.subscription = consumer.subscriptions.create(
+      { channel: "UserGroupChatChannel" },
+      {
+        received: (data) => {
+          if (data.type === "replace") this.replaceItem(data);
+          if (data.type === "reorder") this.moveToTop(data.chat_room_id);
+        },
+      }
     );
   }
 
-  handleData(data) {
-    if (data.type === "replace") {
-      const existing = document.querySelector(
-        `#group-chat-item-${data.chat_room_id}`
-      );
-      if (existing) {
-        existing.outerHTML = data.html;
-      } else {
-        document
-          .querySelector("#other-group-chat-list")
-          ?.insertAdjacentHTML("beforeend", data.html);
-      }
-    } else if (data.type === "unread_count") {
-      const box = document.querySelector(`#unread-count-${data.chat_room_id}`);
-      if (box) box.outerHTML = data.html;
-    } else if (data.type === "deleted_by_creator") {
-      document.querySelector(`#group-chat-item-${data.chat_room_id}`)?.remove();
+  disconnect() {
+    if (this.subscription) consumer.subscriptions.remove(this.subscription);
+  }
 
-      if (Number(this.chatRoomIdValue) === Number(data.chat_room_id)) {
-        this.removeGroupChatFromDOM(data.chat_room_id);
-        alert(data.message);
-        window.location.href = `/group/users/${this.userIdValue}`;
-      }
+  replaceItem({ chat_room_id, html }) {
+    const li = document.getElementById(`group-chat-item-${chat_room_id}`);
+    if (li) {
+      li.outerHTML = html;
     }
+  }
+
+  moveToTop(chatRoomId) {
+    const li = document.getElementById(`group-chat-item-${chatRoomId}`);
+    const list = li?.parentElement;
+    if (li && list) list.prepend(li);
   }
 
   // header-クリック系
@@ -47,8 +42,9 @@ export default class extends Controller {
 
   confirmDelete(e) {
     const groupChatId = e.currentTarget.dataset.groupChatId;
-    if (confirm("本当にグループチャットを削除しますか？"))
+    if (confirm("本当にグループチャットを削除しますか？")) {
       this.leaveGroup(groupChatId);
+    }
   }
 
   async leaveGroup(groupChatId) {
@@ -63,7 +59,7 @@ export default class extends Controller {
     });
 
     if (res.ok) {
-      // ローカルだけで消す（作成者削除・参加者退会どちらもここ）
+      // ローカルだけで消す（サーバからの通知も来るが、二重でも安全）
       this.removeGroupChatFromDOM(groupChatId);
 
       // 表示中ならリダイレクト
@@ -79,9 +75,5 @@ export default class extends Controller {
   removeGroupChatFromDOM(groupChatId) {
     document.querySelector(`#group-chat-item-${groupChatId}`)?.remove();
     document.querySelector(".group-center-area")?.remove();
-  }
-
-  disconnect() {
-    this.subscription?.unsubscribe?.();
   }
 }

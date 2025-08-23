@@ -18,41 +18,27 @@ class GroupMessagesController < ApplicationController
                                    })
 
       # 未読数更新
-      @chat_room.users.where.not(id: current_user.id).each do |user|
-        GroupMessageRead.find_or_create_by!(
-          user: user,
-          group_message: @group_message,
-          chat_room: @chat_room
-        )
-
-        unread_html = render_to_string(
-          partial: 'layouts/leftSide/group_chat/unread_count',
+      @chat_room.users.find_each do |user|
+        item_html = render_to_string(
+          partial: 'layouts/leftSide/group_chat/group_chat_item',
           locals: { chat_room: @chat_room, current_user: user }
         )
 
         ActionCable.server.broadcast(
           "user_#{user.id}_group_chat",
           {
+            type: 'replace',
             chat_room_id: @chat_room.id,
-            html: unread_html,
-            type: 'unread_count'
+            html: item_html
           }
         )
-      end
 
-      # leftSideのチャット項目全体を更新
-      group_chat_html = render_to_string(
-        partial: 'layouts/leftSide/group_chat/group_chat_item',
-        locals: { chat_room: @chat_room, current_user: current_user }
-      )
-
-      @chat_room.users.each do |user|
+        # leftSideのチャット項目全体を更新
         ActionCable.server.broadcast(
           "user_#{user.id}_group_chat",
           {
-            chat_room_id: @chat_room.id,
-            html: group_chat_html,
-            type: 'replace'
+            type: 'reorder',
+            chat_room_id: @chat_room.id
           }
         )
       end
@@ -64,16 +50,37 @@ class GroupMessagesController < ApplicationController
   end
 
   def mark_as_read
-    chat_room = ChatRoom.find(params[:chat_room_id])
+    chat_room_id = params[:chat_room_id].to_i
+    return head :bad_request if chat_room_id <= 0
 
-    unread_messages = chat_room.group_messages
-                               .where.not(user_id: current_user.id)
-                               .left_joins(:group_message_reads)
-                               .where(group_message_reads: { user_id: nil })
+    return head :forbidden unless ChatRoomUser.exists?(
+      user_id: current_user.id, chat_room_id: chat_room_id
+    )
 
-    unread_messages.find_each do |message|
-      GroupMessageRead.create(user: current_user, group_message: message, chat_room: chat_room)
+    unread_ids = GroupMessage
+                 .where(chat_room_id: chat_room_id)
+                 .where.not(user_id: current_user.id)
+                 .where.not(
+                   id: GroupMessageRead.where(user_id: current_user.id, chat_room_id: chat_room_id)
+                                       .select(:group_message_id)
+                 ).pluck(:id)
+
+    if unread_ids.any?
+      rows = unread_ids.map do |mid|
+        { user_id: current_user.id, chat_room_id: chat_room_id, group_message_id: mid,
+          created_at: Time.current, updated_at: Time.current }
+      end
+      GroupMessageRead.insert_all(rows)
     end
+
+    item_html = render_to_string(
+      partial: 'layouts/leftSide/group_chat/group_chat_item',
+      locals: { chat_room: ChatRoom.find(chat_room_id), current_user: current_user }
+    )
+    ActionCable.server.broadcast(
+      "user_#{current_user.id}_group_chat",
+      { type: 'replace', chat_room_id: chat_room_id, html: item_html }
+    )
 
     head :ok
   end

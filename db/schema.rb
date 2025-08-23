@@ -73,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_18_045949) do
     t.datetime "updated_at", null: false
     t.index ["chat_room_id"], name: "index_group_message_reads_on_chat_room_id"
     t.index ["group_message_id"], name: "index_group_message_reads_on_group_message_id"
-    t.index ["user_id", "group_message_id"], name: "index_group_message_reads_on_user_id_and_group_message_id", unique: true
+    t.index ["user_id", "group_message_id"], name: "idx_gmr_user_msg", unique: true
     t.index ["user_id"], name: "index_group_message_reads_on_user_id"
   end
 
@@ -124,9 +124,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_18_045949) do
   add_foreign_key "friend_requests", "users", column: "sender_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
-  add_foreign_key "group_message_reads", "chat_rooms"
-  add_foreign_key "group_message_reads", "group_messages"
-  add_foreign_key "group_message_reads", "users"
+  add_foreign_key "group_message_reads", "chat_rooms", on_delete: :cascade
+  add_foreign_key "group_message_reads", "users", on_delete: :cascade
   add_foreign_key "group_messages", "chat_rooms"
   add_foreign_key "group_messages", "users"
   add_foreign_key "messages", "chats"

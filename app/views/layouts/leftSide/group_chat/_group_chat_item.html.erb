@@ -5,10 +5,6 @@
     <div class="chat-name">
       <%= chat_room.name %>（<%= chat_room.users.count %>人）
       <span id="unread-count-group-<%= chat_room.id %>">
-        <% unread = local_assigns[:unread_count] || 0 %>
-        <% if unread > 0 %>
-          <span class="unread-badge">未読数🔴<%= unread %></span>
-        <% end %>
       </span>
     </div>
     <div class="chat-preview">

@@ -1,6 +1,8 @@
 class GroupChatsController < ApplicationController
   before_action :authenticate_user!
 
+  # groupChat削除時の全挙動
+
   def show
     @chat_room = ChatRoom.find(params[:id])
     @group_messages = @chat_room.group_messages.includes(:user)

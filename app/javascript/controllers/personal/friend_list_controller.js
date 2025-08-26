@@ -13,6 +13,7 @@ export default class extends Controller {
           if (this.hasListTarget) {
             this.listTarget.innerHTML = html;
             this.sortFriendList();
+            this._refreshCsrfForStartChatForms();
           }
         },
       }
@@ -39,5 +40,25 @@ export default class extends Controller {
     });
 
     items.forEach((item) => this.listTarget.appendChild(item));
+  }
+
+  // ★ Cableで差し込んだ start_chat フォームの authenticity_token を
+  // ★ 今のページ（自分のセッション）のトークンで上書きする
+  _refreshCsrfForStartChatForms() {
+    const token =
+      document.querySelector('meta[name="csrf-token"]')?.content || "";
+    if (!token) return;
+    this.listTarget
+      .querySelectorAll('form[action*="/start_chat/"]')
+      .forEach((form) => {
+        let input = form.querySelector('input[name="authenticity_token"]');
+        if (!input) {
+          input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "authenticity_token";
+          form.appendChild(input);
+        }
+        input.value = token;
+      });
   }
 }

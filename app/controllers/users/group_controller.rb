@@ -9,7 +9,7 @@ module Users
       preload_base_lists
       if @chat_room
         load_room_context(@chat_room)
-        mark_room_as_read!(@chat_room, current_user) # ここで一括既読
+        mark_room_as_read!(@chat_room, current_user)
         refresh_left_list_for!(current_user)
       end
       @ordered_rooms = sort_rooms(@chat_room&.id)
@@ -17,7 +17,7 @@ module Users
 
     private
 
-    # --------- guards ---------
+    # guard
     def set_user
       @user = User.find(params[:id])
     end
@@ -30,7 +30,6 @@ module Users
       @chat_room = ChatRoom.includes(:users).find_by(id: params[:chat_room_id])
     end
 
-    # --------- preload (左カラム土台) ---------
     # メッセージ本文はここで読まない。最新時刻/プレビューは別クエリ。
     def preload_base_lists
       @chat_rooms  = @user.chat_rooms.includes(:users)
@@ -42,7 +41,7 @@ module Users
                     .group(:chat_room_id)
                     .maximum(:created_at)
 
-      # 各部屋の最新メッセージ本文（SQLite対応：MAX(created_at)サブクエリJOIN）
+      # 各部屋の最新メッセージ本文
       @preview_map = {}
       ids = @chat_rooms.map(&:id)
       return if ids.empty?
@@ -62,7 +61,7 @@ module Users
       rows.each { |m| @preview_map[m.chat_room_id] = m.content }
     end
 
-    # --------- 中央カラム文脈 ---------
+    # 中央カラム文脈
     def load_room_context(room)
       @group_messages    = room.group_messages.includes(:user).order(:created_at)
       @group_message     = GroupMessage.new
@@ -73,7 +72,7 @@ module Users
       @sorted_members = members.sort_by { |u| [u.id == room.creator_id ? 0 : 1, u.name] }.first(10)
     end
 
-    # --------- 既読をDB側一発挿入（SQLite/PG両対応） ---------
+    # 既読をDB側挿入（SQLite/PG両対応）
     def mark_room_as_read!(room, user)
       joined_at = joined_at_for(user, room)
 
@@ -122,7 +121,7 @@ module Users
       ChatRoomUser.where(user_id: user.id, chat_room_id: room.id).pick(:created_at)
     end
 
-    # --------- 左リスト更新（互換維持） ---------
+    #  左リスト更新（互換維持）
     def refresh_left_list_for!(user)
       if defined?(GroupChatListBroadcaster)
         GroupChatListBroadcaster.push_for_user(user)
@@ -152,7 +151,7 @@ module Users
       end
     end
 
-    # --------- 並べ替え ---------
+    # 並べ替え
     def sort_rooms(current_room_id)
       @chat_rooms.sort_by do |room|
         is_current      = room.id == current_room_id ? 0 : 1
